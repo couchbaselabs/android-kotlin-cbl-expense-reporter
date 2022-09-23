@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Expense Reporter</string>
+    <string name="title_activity_main">Expense Reporter</string>
+</resources>

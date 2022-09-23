@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="red_50">#ffeaed</color>
+    <color name="red_100">#ffcad0</color>
+    <color name="red_200">#f39595</color>
+    <color name="red_300">#ea6b6c</color>
+    <color name="red_400">#f44647</color>
+    <color name="red_500">#f93029</color>
+    <color name="red_600">#ffeaed</color>
+    <color name="red_700">#d81424</color>
+    <color name="red_800">#cb041c</color>
+    <color name="red_900">#bd000e</color>
+
+    <color name="teal_200">#23eae3</color>
+    <color name="analogous_400">#ea238d</color>
+
+    <color name="backgroundDark">#2c2c2c</color>
+    <color name="backgroundLight">#FFFFFF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
