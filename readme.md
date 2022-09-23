@@ -54,7 +54,7 @@ The demo application uses <a target="_blank" rel="noopener noreferrer" href="htt
 
 The application structure is a single Activity that uses <a target="_blank" rel="noopener noreferrer"  href="https://developer.android.com/jetpack/compose/mental-model">JetPack Compose</a> to render the multiple compose-based views.  In addition, the <a target="_blank" rel="noopener noreferrer" href="https://developer.android.com/jetpack/compose/navigation">Navigation Graph</a> is used to handle routing and navigation between various views.  
 
-The Inventory Database is a custom class that manages the database state and lifecycle.  Querying and updating documents in the database is handled using the <a target="_blank" rel="noopener noreferrer" href="https://developer.android.com/jetpack/guide#data-layer">repository pattern</a>.  <a target="_blank" rel="noopener noreferrer" href="https://developer.android.com/jetpack/guide#domain-layer">ViewModels</a> will query or post updates to the repository and control the state of objects that the compose-based Views can use to display information. 
+The Database Provider is a custom class that manages the database state and lifecycle.  Querying and updating documents in the database is handled using the <a target="_blank" rel="noopener noreferrer" href="https://developer.android.com/jetpack/guide#data-layer">repository pattern</a>.  <a target="_blank" rel="noopener noreferrer" href="https://developer.android.com/jetpack/guide#domain-layer">ViewModels</a> will query or post updates to the repository and control the state of objects that the compose-based Views can use to display information. 
 
 ### Application Flow
 
