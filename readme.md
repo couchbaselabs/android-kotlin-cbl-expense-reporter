@@ -1,6 +1,6 @@
 # Learn Couchbase Lite with Kotlin and Jetpack Compose
 
-In this learning path you will be reviewing an Android Application written in Kotlin and JetPack Compose that uses the Couchbase Lite Android SDK for Kotlin. You will learn how to get and insert documents using the key-value engine, query the database using the QueryBuilder engine or SQL++, and learn how to sync information between your mobile app and Couchbase Capella with App Services. 
+In this training you will be reviewing an Android Application written in Kotlin and JetPack Compose that uses the Couchbase Lite Android SDK for Kotlin. You will learn how to get and insert documents using the key-value engine, query the database using the QueryBuilder engine or SQL++, and learn how to sync information between your mobile app and Couchbase Capella with App Services. 
 
 
 ## Prerequisites
