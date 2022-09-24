@@ -12,10 +12,10 @@ import java.util.zip.ZipInputStream
 class DatabaseProvider private constructor(private val context: Context) {
 
     var reportDatabase: Database? = null
-    var typesDatabase: Database? = null
+    var startingDatabase: Database? = null
 
     private val defaultReportDatabaseName = "report"
-    private val typesDatabaseName = "types"
+    private val staringDatabaseName = "startingDb"
     var currentReportDatabaseName = "report"
 
     init {
@@ -30,13 +30,13 @@ class DatabaseProvider private constructor(private val context: Context) {
 
     fun dispose() {
         reportDatabase?.close()
-        typesDatabase?.close()
+        startingDatabase?.close()
     }
 
     fun closeDatabases() {
         try {
             reportDatabase?.close()
-            typesDatabase?.close()
+            startingDatabase?.close()
         } catch (e: java.lang.Exception) {
             android.util.Log.e(e.message, e.stackTraceToString())
         }
@@ -46,7 +46,7 @@ class DatabaseProvider private constructor(private val context: Context) {
         try {
             closeDatabases()
             Database.delete(currentReportDatabaseName, context.filesDir)
-            Database.delete(typesDatabaseName, context.filesDir)
+            Database.delete(staringDatabaseName, context.filesDir)
         } catch (e: Exception) {
             android.util.Log.e(e.message, e.stackTraceToString())
         }
@@ -64,11 +64,11 @@ class DatabaseProvider private constructor(private val context: Context) {
             reportDatabase = Database(currentReportDatabaseName, dbConfig)
 
             //setup the warehouse Database
-            //setupTypesDatabase(dbConfig)
+            setupStartingDatabase(dbConfig)
 
             //create indexes for database queries
             createTypeIndex(reportDatabase)
-            createTypeIndex(typesDatabase)
+            createTypeIndex(startingDatabase)
 
             //todo create indexes
 
@@ -77,12 +77,12 @@ class DatabaseProvider private constructor(private val context: Context) {
         }
     }
 
-    private fun setupTypesDatabase(dbConfig: DatabaseConfiguration) {
+    private fun setupStartingDatabase(dbConfig: DatabaseConfiguration) {
         // create the warehouse database if it doesn't already exist
-        val startingTypesFileName = "prebuiltTypes.zip"
-        val prebuiltTypesDatabaseName = "prebuiltTypes"
+        val startingTypesFileName = "staring.zip"
+        val prebuiltTypesDatabaseName = "starting"
 
-        if (!Database.exists(typesDatabaseName, context.filesDir)) {
+        if (!Database.exists(staringDatabaseName, context.filesDir)) {
             unzip(startingTypesFileName, File(context.filesDir.toString()))
 
             /*
@@ -99,9 +99,9 @@ class DatabaseProvider private constructor(private val context: Context) {
                         ("${prebuiltTypesDatabaseName}.cblite2")
                     )
                 )
-            Database.copy(typesDbFile, typesDatabaseName, dbConfig)
+            Database.copy(typesDbFile, staringDatabaseName, dbConfig)
         }
-        typesDatabase = Database(typesDatabaseName, dbConfig)
+        startingDatabase = Database(staringDatabaseName, dbConfig)
     }
 
     // create index for document type if it doesn't exist

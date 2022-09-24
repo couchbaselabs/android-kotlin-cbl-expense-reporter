@@ -1,0 +1,53 @@
+[
+	{
+		"documentId": "e0a80de3-1881-4687-99ba-128356962bc0",
+		"documentType": "expenseTypes",
+		"expenseTypes": [
+			{
+				"name": "Admin",
+				"subTypes": [
+					"Business Cards",
+					"Office Supplies",
+					"Social Media Ads"
+				]
+			},
+			{
+				"name": "Communications",
+				"subTypes": [
+					"Cell Phone",
+					"Internet"
+				]
+			},
+			{
+				"name": "Education",
+				"subTypes": [
+					"Book",
+					"Training"
+				]
+			},
+			{
+				"name": "Software",
+				"subTypes": [
+					"License",
+					"Retail"
+				]
+			},
+			{
+				"name": "Subscription",
+				"subTypes": [
+					"Subscription"
+				]
+			},
+			{
+				"name": "Travel",
+				"subTypes": [
+					"Airfare",
+					"Hotel",
+					"Meals",
+					"Mileage",
+					"Ground Transportation"
+				]
+			}
+		]
+	}
+]

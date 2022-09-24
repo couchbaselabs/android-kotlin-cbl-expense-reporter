@@ -1,0 +1,200 @@
+[
+	{
+		"managerId": "ed9b897a-7a83-49e8-8599-3609297920e0",
+		"givenName": "Geordie",
+		"surname": "Joannidi",
+		"email": "geordie.joannidi@example.com",
+		"gender": "Male",
+		"department": "Sales",
+		"jobTitle": "Manager - US West" 
+	},
+	{
+		"managerId": "dc07ba66-a4d2-4133-9797-383a0cab115d",
+		"givenName": "Yvor",
+		"surname": "Fisbburne",
+		"email": "yvor.fisbburne@example.com",
+		"gender": "Male",
+		"department": "Sales",
+		"jobTitle": "Manager - US North"
+	},
+	{
+		"managerId": "720e7525-a9be-446a-b827-8be4ca0d1c7e",
+		"givenName": "Brande",
+		"surname": "Scamal",
+		"email": "brande.scamal@example.com",
+		"gender": "Female",
+		"department": "Sales",
+		"jobTitle": "Manager - US East",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "d5f8bf6f-44a7-4d7c-8147-8c32cc30496d",
+		"givenName": "Bobette",
+		"surname": "Clutram",
+		"email": "bobette.clutram@example.com",
+		"gender": "Female",
+		"department": "Sales",
+		"jobTitle": "Manager - US South",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "2c694a46-63e2-4ffe-ba3b-8746c3bfe959",
+		"givenName": "Toni",
+		"surname": "Riddett",
+		"email": "toni.riddett@example.com",
+		"gender": "Female",
+		"department": "Sales",
+		"jobTitle": "Manager - US Midwest",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "b38c3ad7-37b9-46aa-b167-45958014c7fc",
+		"givenName": "Rania",
+		"surname": "Kleanthous",
+		"email": "rania.kleanthous@example.com",
+		"gender": "Female",
+		"department": "Sales",
+		"jobTitle": "Director",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "b4e8e9c3-318d-46e8-8c78-3307d6b81873",
+		"givenName": "Jere",
+		"surname": "Renault",
+		"email": "jere.renault@example.com",
+		"gender": "Female",
+		"department": "Human Resources",
+		"jobTitle": "Manager - Recruiting",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "b36c882e-6c05-4211-93ac-60b95cf5d4b8",
+		"givenName": "Lynett",
+		"surname": "Frear",
+		"email": "lynett.frear@example.com",
+		"gender": "Female",
+		"department": "Human Resources",
+		"jobTitle": "Payroll Manager",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "1592e47f-edc9-4a8a-ac87-80c6b04ee7e9",
+		"givenName": "Paxon",
+		"surname": "Semmence",
+		"email": "paxon.semmence@example.com",
+		"gender": "Male",
+		"department": "Human Resources",
+		"jobTitle": "Director",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "d6e0f132-c33e-4e48-9f0b-4a8d256d1b7d",
+		"givenName": "Saunderson",
+		"surname": "Sweetenham",
+		"email": "saunderson.sweetenham@example.com",
+		"gender": "Male",
+		"department": "Human Resources",
+		"jobTitle": "Payroll Manager",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "814e3b71-e7eb-4325-91fc-72eebf5952dc",
+		"givenName": "Estrellita",
+		"surname": "Micklewright",
+		"email": "estrellita.micklewright@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Manager - SRE",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "71bf4fd0-18cb-4b4e-bb75-730caf950311",
+		"givenName": "Karole",
+		"surname": "Kemwal",
+		"email": "karole.kemwal@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Manager - QE",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "d33a039a-0876-4c78-a7f5-d0f4f0ee1e43",
+		"givenName": "Marisa",
+		"surname": "Durrance",
+		"email": "marisa.durrance@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Manager - Developer Advocates",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "8b168f77-9121-4ba4-94e3-1a2889c5c70c",
+		"givenName": "Brittaney",
+		"surname": "Strooband",
+		"email": "brittaney.strooband@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Manager - Architect",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "b24cd03f-e038-411c-8603-18492212c0e6",
+		"givenName": "Amil",
+		"surname": "Flack",
+		"email": "amil.flack@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "VP - Cloud Services",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "5555ce22-c4b5-4532-81d0-29800bf110f7",
+		"givenName": "Arvy",
+		"surname": "Ewington",
+		"email": "arvy.ewington@example.com",
+		"gender": "Male",
+		"department": "Engineering",
+		"jobTitle": "Manager - Backend Services",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "21e7ebbd-2034-4b43-adb2-163274f4f2a8",
+		"givenName": "Kendrick",
+		"surname": "Ventura",
+		"email": "kendrick.ventura@example.com",
+		"gender": "Male",
+		"department": "Engineering",
+		"jobTitle": "Director",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "884df0ce-3f9a-4b27-b338-5f2503d1c3a9",
+		"givenName": "Lishe",
+		"surname": "Cottem",
+		"email": "lishe.cottem@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Lead Frontend Developer",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "a1e81c9c-e0d6-43ba-bbe4-39a2660f47fa",
+		"givenName": "Jinny",
+		"surname": "McKechnie",
+		"email": "jinny.mcKechnie@example.com",
+		"gender": "Female",
+		"department": "Engineering",
+		"jobTitle": "Lead Backend Developer",
+		"documentType": "manager"
+	},
+	{
+		"managerId": "50096aec-58e9-456f-8258-96d1585344ef",
+		"givenName": "Dan",
+		"surname": "Dulanty",
+		"email": "dan.dulanty@example.com",
+		"gender": "Male",
+		"department": "Engineering",
+		"jobTitle": "Lead Mobile Developer",
+		"documentType": "manager"
+	}
+]
