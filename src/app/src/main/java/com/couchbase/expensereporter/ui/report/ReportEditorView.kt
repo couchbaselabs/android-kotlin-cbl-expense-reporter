@@ -2,6 +2,7 @@ package com.couchbase.expensereporter.ui.report
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -9,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -45,6 +48,7 @@ fun ReportEditorView(
 
                 ReportEditor(
                     report = viewModel.reportState.value,
+                    approverManagerSelection =  viewModel.approvalManagerSelectedState.value,
                     reportDate = viewModel.reportDateState.value,
                     onNameChange = viewModel.onNameChanged,
                     onDescriptionChange = viewModel.onDescriptionChanged,
@@ -60,6 +64,7 @@ fun ReportEditorView(
 @Composable
 fun ReportEditor(
     report: Report?,
+    approverManagerSelection: String,
     reportDate: String,
     onNameChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
@@ -99,7 +104,7 @@ fun ReportEditor(
             item {
                 DatePicker(selectedDate = reportDate, onDateChanged = onDateChanged)
             }
-            /*
+
             item {
                 LazyRow(modifier = Modifier
                     .fillMaxHeight()
@@ -110,20 +115,20 @@ fun ReportEditor(
                     item {
                         Text(
                             modifier = Modifier.padding(end = 16.dp),
-                            text = "Location:")}
+                            text = "Approval Manager:")}
                     item {
                         TextButton(
                             onClick = {
-                                onReportProject(false)
+                                onSaveReport(false)
                             }) {
-                            Text(locationSelection,
+                            Text(approverManagerSelection,
                                 style = TextStyle(textDecoration = TextDecoration.Underline)
                             )
                         }
                     }
                 }
             }
-            */
+
             item {
                 Column(
                     Modifier
@@ -162,6 +167,7 @@ fun ReportEditor(
 private fun ReportEditorPreview() {
     val report = Report()
     val onNameChange: (String) -> Unit = {}
+    val approverManagerSelectionText = "No Approval Manager Selected"
     val reportDate = "Report Date"
     val onDescriptionChange: (String) -> Unit = { }
     val onSaveReport: (navigateUp: Boolean) -> Unit  =  { }
@@ -174,6 +180,7 @@ private fun ReportEditorPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             ReportEditor(report = report,
+                approverManagerSelection = approverManagerSelectionText,
                 onNameChange = onNameChange,
                 onDescriptionChange = onDescriptionChange,
                 onDateChanged = onDateChanged,

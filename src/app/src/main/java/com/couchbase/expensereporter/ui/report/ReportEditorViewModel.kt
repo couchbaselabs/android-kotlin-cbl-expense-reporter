@@ -16,6 +16,7 @@ class ReportEditorViewModel(private val repository: ReportRepository)
     var reportState = mutableStateOf<Report?>(null)
 
     val reportDateState = mutableStateOf("Select Report Date")
+    val approvalManagerSelectedState = mutableStateOf("No Manager Selected")
     val errorMessageState = mutableStateOf("")
     var navigateUpCallback: () -> Unit  = { }
     var navigateToManagerSelection: (String) -> Unit = { }
@@ -28,6 +29,13 @@ class ReportEditorViewModel(private val repository: ReportRepository)
                 report.reportDate?.let { date ->
                     val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
                     reportDateState.value = formatter.format(date)
+                }
+                if (report.approvalManager != null){
+                    report.approvalManager?.let{
+                        approvalManagerSelectedState.value = "${it.givenName} ${it.surName}"
+                    }
+                } else {
+                    approvalManagerSelectedState.value = "No Manager Selected"
                 }
             }
         }
