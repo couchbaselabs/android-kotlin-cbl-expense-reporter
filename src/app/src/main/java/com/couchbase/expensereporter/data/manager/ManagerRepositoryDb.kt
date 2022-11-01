@@ -30,17 +30,17 @@ class ManagerRepositoryDb(context: Context)
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->
-                    var queryString = "SELECT * FROM _ AS item WHERE documentType=\"manager\" AND department=\$department"
+                    var queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND department=\$department")
 
                     val parameters = Parameters()  // <2>
                     parameters.setValue("department", department)
 
                     title?.let { // <3>
-                        queryString += " AND title=\$title"
+                        queryString.append(" AND title=\$title")
                         parameters.setValue("title", it)
                     }
 
-                    val query = database.createQuery(queryString) // <4>
+                    val query = database.createQuery(queryString.toString()) // <4>
                     query.parameters = parameters; // <5>
 
                     query.execute()

@@ -14,6 +14,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import java.lang.ref.WeakReference
 
 import com.couchbase.expensereporter.data.KeyValueRepository
+import com.couchbase.expensereporter.data.manager.ManagerRepositoryDb
 import com.couchbase.expensereporter.data.report.ReportRepository
 import com.couchbase.expensereporter.data.report.ReportRepositoryDb
 import com.couchbase.expensereporter.data.userprofile.UserProfileRepository
@@ -55,6 +56,7 @@ class ExpenseReporterApplication
                 single { MockAuthenticationService() as AuthenticationService }
                 single { UserProfileRepository(this@ExpenseReporterApplication) as KeyValueRepository }
                 single { ReportRepositoryDb(this@ExpenseReporterApplication, get()) as ReportRepository}
+                single { ManagerRepositoryDb(this@ExpenseReporterApplication)}
 
                 viewModel{ LoginViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { MainViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
