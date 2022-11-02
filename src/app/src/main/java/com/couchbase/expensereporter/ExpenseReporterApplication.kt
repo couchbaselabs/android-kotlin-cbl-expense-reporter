@@ -14,6 +14,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import java.lang.ref.WeakReference
 
 import com.couchbase.expensereporter.data.KeyValueRepository
+import com.couchbase.expensereporter.data.manager.ManagerRepository
 import com.couchbase.expensereporter.data.manager.ManagerRepositoryDb
 import com.couchbase.expensereporter.data.report.ReportRepository
 import com.couchbase.expensereporter.data.report.ReportRepositoryDb
@@ -26,6 +27,7 @@ import com.couchbase.expensereporter.ui.developer.DeveloperInfoWidget
 import com.couchbase.expensereporter.ui.developer.DeveloperViewModel
 import com.couchbase.expensereporter.ui.login.LoginViewModel
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
+import com.couchbase.expensereporter.ui.report.ManagerSelectionViewModel
 import com.couchbase.expensereporter.ui.report.ReportEditorViewModel
 import com.couchbase.expensereporter.ui.report.ReportListViewModel
 
@@ -56,16 +58,16 @@ class ExpenseReporterApplication
                 single { MockAuthenticationService() as AuthenticationService }
                 single { UserProfileRepository(this@ExpenseReporterApplication) as KeyValueRepository }
                 single { ReportRepositoryDb(this@ExpenseReporterApplication, get()) as ReportRepository}
-                single { ManagerRepositoryDb(this@ExpenseReporterApplication)}
+                single { ManagerRepositoryDb(this@ExpenseReporterApplication) as ManagerRepository}
 
                 viewModel{ LoginViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { MainViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { ReportListViewModel(get())}
                 viewModel { ReportEditorViewModel(get()) }
                 viewModel { UserProfileViewModel(get(), get(), WeakReference(this@ExpenseReporterApplication)) }
-
+                viewModel { ManagerSelectionViewModel(get(), get()) }
                 viewModel { DeveloperViewModel(get()) }
-                viewModel { DevDatabaseInfoViewModel(get(), get(), get()) }
+                viewModel { DevDatabaseInfoViewModel(get(), get(), get(), get()) }
             }
         }
 }

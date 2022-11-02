@@ -17,10 +17,7 @@ import com.couchbase.expensereporter.ui.login.LoginView
 import com.couchbase.expensereporter.ui.login.LoginViewModel
 import com.couchbase.expensereporter.ui.profile.UserProfileView
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
-import com.couchbase.expensereporter.ui.report.ReportEditorView
-import com.couchbase.expensereporter.ui.report.ReportEditorViewModel
-import com.couchbase.expensereporter.ui.report.ReportListView
-import com.couchbase.expensereporter.ui.report.ReportListViewModel
+import com.couchbase.expensereporter.ui.report.*
 import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.getViewModel
 import java.util.*
@@ -36,6 +33,10 @@ object MainDestinations {
     const val REPORT_EDITOR_ROUTE = "report_editor"
     const val REPORT_EDITOR_ROUTE_PATH = "report_editor/{reportId}"
     const val REPORT_KEY_ID = "reportId"
+
+    const val MANGER_LIST_ROUTE = "manager_list"
+    const val MANAGER_ROUTE_PATH = "manager_list/{reportId}"
+    const val MANAGER_LIST_KEY_ID = "reportId"
 
     const val EXPENSE_LIST_ROUTE_PATH = "expenseList/{report}"
     const val EXPENSE_LIST_ROUTE = "expenseList"
@@ -87,7 +88,7 @@ fun NavigationGraph (
             }
             ReportEditorView(
                 viewModel = viewModel,
-                navigateToManagerSelection = { },
+                navigateToManagerSelection = actions.navigateToManagerListSelector,
                 navigateUp = actions.upPress,
                 scaffoldState = scaffoldState)
         }
@@ -97,6 +98,18 @@ fun NavigationGraph (
                 openDrawer = openDrawer,
                 scaffoldState = scaffoldState,
                 viewModel = getViewModel<UserProfileViewModel>())
+        }
+
+        composable(MainDestinations.MANAGER_ROUTE_PATH) {  backstackEntry ->
+            val reportId = backstackEntry.arguments?.getString(MainDestinations.MANAGER_LIST_KEY_ID)
+            reportId?.let {
+                val viewModel = getViewModel<ManagerSelectionViewModel>()
+                viewModel.reportId(it)
+                ManagerSelectionView(
+                    viewModel = viewModel,
+                    navigateUp = actions.upPress
+                )
+            }
         }
 
         composable(MainDestinations.DEVELOPER_ROUTE){
@@ -138,6 +151,10 @@ class MainActions(navController: NavHostController) {
 
     val navigateToExpenseEditor:(String, String) -> Unit = { reportId: String, expense: String ->
         navController.navigate("${MainDestinations.EXPENSE_EDITOR_ROUTE}/$reportId/$expense")
+    }
+
+    val navigateToManagerListSelector: (String) -> Unit = { reportId: String ->
+        navController.navigate("${MainDestinations.MANGER_LIST_ROUTE}/$reportId")
     }
 
     val navigateToDeveloperDatabaseInfo:() -> Unit = {

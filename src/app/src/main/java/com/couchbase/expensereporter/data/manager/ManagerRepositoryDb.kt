@@ -17,12 +17,11 @@ class ManagerRepositoryDb(context: Context)
     : ManagerRepository {
     private val databaseProvider: DatabaseProvider = DatabaseProvider.getInstance(context)
 
-    override val managerDatabaseName: () -> String? = {
-        databaseProvider.startingDatabase?.name
-    }
-    override val managerDatabaseLocation: () -> String? = {
-        databaseProvider.startingDatabase?.path
-    }
+    override val managerDatabaseName: String?
+        get() = databaseProvider.startingDatabase?.name
+
+    override val managerDatabaseLocation: String?
+        get() = databaseProvider.startingDatabase?.path
 
     override suspend fun getByDepartmentTitle(department: String, title: String?): List<Manager> {
         return withContext(Dispatchers.IO) {
@@ -30,21 +29,25 @@ class ManagerRepositoryDb(context: Context)
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->
-                    var queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND department=\$department")
+                    var queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$department || '%')")
 
                     val parameters = Parameters()  // <2>
-                    parameters.setValue("department", department)
+                    parameters.setValue("department", department.lowercase())
 
                     title?.let { // <3>
-                        queryString.append(" AND title=\$title")
-                        parameters.setValue("title", it)
+                        if (title.isNotBlank()) {
+                            queryString.append(" AND lower(title) LIKE ('%' || \$title || '%')")
+                            parameters.setValue("title", it.lowercase())
+                        }
                     }
 
                     val query = database.createQuery(queryString.toString()) // <4>
                     query.parameters = parameters; // <5>
 
-                    query.execute()
+                    var results = query.execute()
                         .allResults()
+
+                   results
                         .forEach { item ->  // <6>
                             val json = item.toJSON()
                             val manager = Json.decodeFromString<ManagerDao>(json).item

@@ -3,8 +3,8 @@ package com.couchbase.expensereporter.data.manager
 import com.couchbase.expensereporter.models.Manager
 
 interface ManagerRepository {
-    val managerDatabaseName: () -> String?
-    val managerDatabaseLocation:() -> String?
+    val managerDatabaseName: String?
+    val managerDatabaseLocation: String?
 
     suspend fun getByDepartmentTitle(
         department: String,

@@ -32,7 +32,7 @@ class ReportEditorViewModel(private val repository: ReportRepository)
                 }
                 if (report.approvalManager != null){
                     report.approvalManager?.let{
-                        approvalManagerSelectedState.value = "${it.givenName} ${it.surName}"
+                        approvalManagerSelectedState.value = "${it.givenName} ${it.surname}"
                     }
                 } else {
                     approvalManagerSelectedState.value = "No Manager Selected"

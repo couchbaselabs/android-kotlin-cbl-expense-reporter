@@ -37,10 +37,13 @@ fun DevDatabaseInfoView(
                 DeveloperInfoWidget(
                     viewModel.reportDatabaseName.value,
                     viewModel.reportDatabaseLocation.value,
+                    viewModel.startingDatabaseName.value,
+                    viewModel.startingDatabaseLocation.value,
                     viewModel.currentUsername.value,
                     viewModel.currentDepartment.value,
                     viewModel.numberOfUserProfiles.value,
                     viewModel.numberOfReports.value,
+                    viewModel.numberOfManagers.value,
                 )
             }
         }
@@ -51,10 +54,13 @@ fun DevDatabaseInfoView(
 fun DeveloperInfoWidget(
     reportDatabaseName: String,
     reportDatabaseLocation: String?,
+    startingDatabaseName: String?,
+    startingDatabaseLocation: String?,
     currentUser: String,
     currentDepartment: String,
     numberOfUserProfiles: Int,
     numberOfReports: Int,
+    numberOfManagers: Int,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -131,6 +137,54 @@ fun DeveloperInfoWidget(
                 modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
             )
         }
+
+        startingDatabaseLocation?.let {
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Starting Database Path", fontWeight = FontWeight.Bold)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(it)
+                }
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 2.dp,
+                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                )
+            }
+        }
+        startingDatabaseName?.let {
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Starting Database Name", fontWeight = FontWeight.Bold)
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(it)
+                }
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 2.dp,
+                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                )
+            }
+        }
+
         item {
             Row(
                 horizontalArrangement = Arrangement.Start,
@@ -173,6 +227,27 @@ fun DeveloperInfoWidget(
                 modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
             )
         }
+        item {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Managers Count", fontWeight = FontWeight.Bold)
+            }
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("$numberOfManagers")
+            }
+            Divider(
+                color = Color.LightGray,
+                thickness = 2.dp,
+                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+            )
+        }
     }
 }
 
@@ -181,17 +256,23 @@ fun DeveloperInfoWidget(
 fun DeveloperInfoWidgetPreview() {
     val reportDatabaseName = "inventoryDummy"
     val reportDatabaseLocation = "/blah/inventory"
+    val startingDatabaseName = "startingDummy"
+    val startingDatabaseLocation = "/blah/starting"
     val currentUser = "demo@example.com"
     val currentDepartment = "Engineering"
     val numberOfUserProfiles = 1000000000
     val numberOfReports = 1000000000
+    val numberOfManagers = 100000000
 
     DeveloperInfoWidget(
         reportDatabaseName = reportDatabaseName,
         reportDatabaseLocation = reportDatabaseLocation,
+        startingDatabaseName = startingDatabaseName,
+        startingDatabaseLocation = startingDatabaseLocation,
         currentUser =  currentUser,
         currentDepartment = currentDepartment,
         numberOfUserProfiles = numberOfUserProfiles,
         numberOfReports = numberOfReports,
+        numberOfManagers = numberOfManagers
     )
 }

@@ -79,7 +79,7 @@ class DatabaseProvider private constructor(private val context: Context) {
 
     private fun setupStartingDatabase(dbConfig: DatabaseConfiguration) {
         // create the warehouse database if it doesn't already exist
-        val startingTypesFileName = "staring.zip"
+        val startingTypesFileName = "starting.zip"
         val prebuiltTypesDatabaseName = "starting"
 
         if (!Database.exists(staringDatabaseName, context.filesDir)) {

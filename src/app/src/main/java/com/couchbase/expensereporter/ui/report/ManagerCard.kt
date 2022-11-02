@@ -45,7 +45,7 @@ fun ManagerCard(
                         .fillMaxWidth(0.85f)
                         .wrapContentWidth(Alignment.Start)
                         .padding(top = 4.dp),
-                    text = "${manager.givenName} ${manager.surName}",
+                    text = "${manager.givenName} ${manager.surname}",
                     style = MaterialTheme.typography.h6,
                     color = MaterialTheme.colors.onSurface
                 )
@@ -55,7 +55,7 @@ fun ManagerCard(
                     maxLines = 3,
                     modifier = Modifier.padding(top = 2.dp),
                     overflow = TextOverflow.Ellipsis,
-                    text = manager.title,
+                    text = manager.jobTitle,
                     style = MaterialTheme.typography.caption,
                     color = MaterialTheme.colors.onSurface
                 )
@@ -79,9 +79,11 @@ fun ManagerCard(
 @Composable
 fun ManagerCardPreview() {
     val manager = Manager(
+        managerId = "man001",
         givenName = "John",
-        surName = "Doe",
-        title = "Sr. Developer",
+        surname = "Doe",
+        jobTitle = "Sr. Developer",
+        gender = "Male",
         department = "Engineering",
         email = "john.doe@example.com"
     )
