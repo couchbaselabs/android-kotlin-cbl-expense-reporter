@@ -1,9 +1,6 @@
 package com.couchbase.expensereporter.ui.report
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -46,7 +43,9 @@ fun ReportListView(
                 // collecting the flow and turning it into state
                 // https://developer.android.com/jetpack/compose/libraries#streams
                 if (viewModel.repositoryFlow == null) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
                         CircularProgressIndicator()
                     }
                 }

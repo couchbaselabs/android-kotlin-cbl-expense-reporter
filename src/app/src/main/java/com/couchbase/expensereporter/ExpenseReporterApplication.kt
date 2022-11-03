@@ -25,6 +25,7 @@ import com.couchbase.expensereporter.ui.MainViewModel
 import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoViewModel
 import com.couchbase.expensereporter.ui.developer.DeveloperInfoWidget
 import com.couchbase.expensereporter.ui.developer.DeveloperViewModel
+import com.couchbase.expensereporter.ui.expense.ExpenseListViewModel
 import com.couchbase.expensereporter.ui.login.LoginViewModel
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
 import com.couchbase.expensereporter.ui.report.ManagerSelectionViewModel
@@ -64,6 +65,7 @@ class ExpenseReporterApplication
                 viewModel { MainViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { ReportListViewModel(get())}
                 viewModel { ReportEditorViewModel(get()) }
+                viewModel { ExpenseListViewModel() }
                 viewModel { UserProfileViewModel(get(), get(), WeakReference(this@ExpenseReporterApplication)) }
                 viewModel { ManagerSelectionViewModel(get(), get()) }
                 viewModel { DeveloperViewModel(get()) }
