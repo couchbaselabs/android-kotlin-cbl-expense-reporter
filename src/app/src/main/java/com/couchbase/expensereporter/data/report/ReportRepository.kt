@@ -8,7 +8,7 @@ interface ReportRepository {
     val databaseName: String
 
     suspend fun get(documentId: String): Report
-    fun getDocuments(): Flow<List<Report>>
+    suspend fun getDocuments(): Flow<List<Report>>
     suspend fun save(document: Report) : Boolean
     suspend fun delete(documentId: String): Boolean
     suspend fun count(): Int

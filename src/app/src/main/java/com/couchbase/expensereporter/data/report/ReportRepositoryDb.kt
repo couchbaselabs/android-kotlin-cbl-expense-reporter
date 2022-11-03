@@ -22,7 +22,6 @@ class ReportRepositoryDb (
     private val context: Context,
     private val authenticationService: AuthenticationService)
     : ReportRepository {
-    private val reportDocumentType = "report"
 
     override val databaseName: String
         get() = DatabaseProvider.getInstance(context).currentReportDatabaseName
@@ -49,52 +48,62 @@ class ReportRepositoryDb (
                         reportId = documentId,
                         reportDate = System.currentTimeMillis(),
                         department = user.department,
-                        createdBy = user.username
+                        createdBy = user.username,
+                        documentType = "report",
+                        status = "Draft",
+                        isComplete = false
                     )
                 )
         }
     }
 
-    override fun getDocuments(): Flow<List<Report>> {
-        try {
-            val db = DatabaseProvider.getInstance(context).reportDatabase
-            // NOTE - the as method is a also a keyword in Kotlin, so it must be escaped using
-            // `as` - this will probably break auto complete suggestion, so it will act like the where
-            // method isn't available  work around is to do your entire statement without the as
-            // function call and add that in last
-            db?.let { database ->
-                val query = QueryBuilder        // <1>
-                    .select(SelectResult.all()) // <2>
-                    .from(DataSource.database(database).`as`("item")) // <3>
-                    .where( //4
-                        Expression.property("documentType").equalTo(Expression.string(reportDocumentType)) // <4>
-                    ) // <4>
+    override suspend fun getDocuments(): Flow<List<Report>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val db = DatabaseProvider.getInstance(context).reportDatabase
+                // NOTE - the as method is a also a keyword in Kotlin, so it must be escaped using
+                // `as` - this will probably break auto complete suggestion, so it will act like the where
+                // method isn't available  work around is to do your entire statement without the as
+                // function call and add that in last
+                db?.let { database ->
+                    val query = QueryBuilder        // <1>
+                        .select(SelectResult.all()) // <2>
+                        .from(DataSource.database(database).`as`("item")) // <3>
+                        .where( //4
+                            Expression.property("documentType")
+                                .equalTo(Expression.string("report")) // <4>
+                        ) // <4>
 
-                // create a flow to return the results dynamically as needed - more information on
-                // CoRoutine Flows can be found at
-                // https://developer.android.com/kotlin/flow
-                val flow = query        // <1>
-                    .queryChangeFlow()  // <1>
-                    .map { qc -> mapQueryChangeToReport(qc) } // <2>
-                    .flowOn(Dispatchers.IO)  // <3>
-                query.execute()  // <4>
-                return flow  // <5>
+                    // create a flow to return the results dynamically as needed - more information on
+                    // CoRoutine Flows can be found at
+                    // https://developer.android.com/kotlin/flow
+                    val flow = query        // <1>
+                        .queryChangeFlow()  // <1>
+                        .map { qc -> mapQueryChangeToReport(qc) } // <2>
+                        .flowOn(Dispatchers.IO)  // <3>
+                    query.execute()  // <4>
+                    return@withContext flow  // <5>
+                }
+            } catch (e: Exception) {
+                Log.e(e.message, e.stackTraceToString())
             }
-        } catch (e: Exception) {
-            Log.e(e.message, e.stackTraceToString())
+            return@withContext  flow { }
         }
-        return flow { }
     }
 
     private fun mapQueryChangeToReport(queryChange: QueryChange): List<Report> {
         val documents = mutableListOf<Report>() // 1
-        queryChange.results?.let { results ->  // 2
-            results.forEach { result ->      // 3
-                val json = result.toJSON()     // 4
-                val document =
-                    Json.decodeFromString<ReportDao>(json).item   // 5
-                documents.add(document) // 6
+        try {
+            queryChange.results?.let { results ->  // 2
+                results.forEach { result ->      // 3
+                    val json = result.toJSON()     // 4
+                    val document =
+                        Json.decodeFromString<ReportDao>(json).item   // 5
+                    documents.add(document) // 6
+                }
             }
+        }catch(e: Exception){
+            Log.e(e.message, e.stackTraceToString())
         }
         return documents // 7
     }
@@ -105,7 +114,8 @@ class ReportRepositoryDb (
             try {
                 val db = DatabaseProvider.getInstance(context).reportDatabase
                 db?.let { database ->
-                    val json = Json.encodeToString(document)
+                    val encoder = Json { encodeDefaults = true }
+                    val json = encoder.encodeToString(document)
                     val doc = MutableDocument(document.reportId, json)
                     database.save(doc)
                     result = true
@@ -148,7 +158,7 @@ class ReportRepositoryDb (
                                 .`as`("count") ) // 2
                         .from(DataSource.database(database)) //3
                         .where(
-                            Expression.property("documentType").equalTo(Expression.string(reportDocumentType)) ) // 4
+                            Expression.property("documentType").equalTo(Expression.string("report")) ) // 4
                     val results = query.execute().allResults() // 5
                     count = results[0].getInt("count") // 6
                 }

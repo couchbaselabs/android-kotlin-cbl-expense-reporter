@@ -167,7 +167,7 @@ fun ReportEditor(
 private fun ReportEditorPreview() {
     val report = Report()
     val onNameChange: (String) -> Unit = {}
-    val approverManagerSelectionText = "No Approval Manager Selected"
+    val approveManagerSelectionText = "No Approval Manager Selected"
     val reportDate = "Report Date"
     val onDescriptionChange: (String) -> Unit = { }
     val onSaveReport: (navigateUp: Boolean) -> Unit  =  { }
@@ -180,7 +180,7 @@ private fun ReportEditorPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             ReportEditor(report = report,
-                approverManagerSelection = approverManagerSelectionText,
+                approverManagerSelection = approveManagerSelectionText,
                 onNameChange = onNameChange,
                 onDescriptionChange = onDescriptionChange,
                 onDateChanged = onDateChanged,
