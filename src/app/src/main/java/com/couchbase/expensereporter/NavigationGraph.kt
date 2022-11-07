@@ -13,6 +13,7 @@ import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoView
 import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoViewModel
 import com.couchbase.expensereporter.ui.developer.DeveloperView
 import com.couchbase.expensereporter.ui.developer.DeveloperViewModel
+import com.couchbase.expensereporter.ui.expense.ExpenseListView
 import com.couchbase.expensereporter.ui.expense.ExpenseListViewModel
 import com.couchbase.expensereporter.ui.login.LoginView
 import com.couchbase.expensereporter.ui.login.LoginViewModel
@@ -20,6 +21,9 @@ import com.couchbase.expensereporter.ui.profile.UserProfileView
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
 import com.couchbase.expensereporter.ui.report.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.getViewModel
 import java.util.*
 
@@ -98,17 +102,23 @@ fun NavigationGraph (
             val reportId = backstackEntry.arguments?.getString(MainDestinations.EXPENSE_LIST_KEY_ID)
             reportId?.let {
                 val viewModel = getViewModel<ExpenseListViewModel>()
-                viewModel.reportId = it
-                viewModel.getExpenseReports()
-                /*
-                AuditListView(
+
+                //set values so when view comes into memory we already have data ready
+                //make sure to run this on Dispatcher.IO instead of main thread
+                scope.launch {
+                    withContext(Dispatchers.IO) {
+                        viewModel.reportId = it
+                        viewModel.getExpenseReports()
+                    }
+                }
+
+                ExpenseListView(
                     viewModel = viewModel,
                     actions.upPress,
-                    actions.navigateToAuditEditor,
+                    actions.navigateToExpenseEditor,
                     scaffoldState = scaffoldState,
-                    snackBarCoroutineScope = scope
+                    scope = scope
                 )
-                 */
             }
         }
 

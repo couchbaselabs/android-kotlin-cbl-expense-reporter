@@ -42,7 +42,7 @@ fun ReportListView(
             {
                 // collecting the flow and turning it into state
                 // https://developer.android.com/jetpack/compose/libraries#streams
-                if (viewModel.repositoryFlow == null) {
+                if (viewModel.reportFlow == null) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -50,7 +50,7 @@ fun ReportListView(
                     }
                 }
 
-                viewModel.repositoryFlow?.let {
+                viewModel.reportFlow?.let {
                     val documents by it.collectAsState(initial = listOf())
 
                     ReportList(

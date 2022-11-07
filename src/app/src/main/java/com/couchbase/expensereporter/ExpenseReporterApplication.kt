@@ -14,6 +14,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import java.lang.ref.WeakReference
 
 import com.couchbase.expensereporter.data.KeyValueRepository
+import com.couchbase.expensereporter.data.expense.ExpenseRepository
+import com.couchbase.expensereporter.data.expense.ExpenseRepositoryDb
 import com.couchbase.expensereporter.data.manager.ManagerRepository
 import com.couchbase.expensereporter.data.manager.ManagerRepositoryDb
 import com.couchbase.expensereporter.data.report.ReportRepository
@@ -60,12 +62,13 @@ class ExpenseReporterApplication
                 single { UserProfileRepository(this@ExpenseReporterApplication) as KeyValueRepository }
                 single { ReportRepositoryDb(this@ExpenseReporterApplication, get()) as ReportRepository}
                 single { ManagerRepositoryDb(this@ExpenseReporterApplication) as ManagerRepository}
+                single { ExpenseRepositoryDb(this@ExpenseReporterApplication) as ExpenseRepository }
 
                 viewModel{ LoginViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { MainViewModel(get(), WeakReference(this@ExpenseReporterApplication))}
                 viewModel { ReportListViewModel(get())}
                 viewModel { ReportEditorViewModel(get()) }
-                viewModel { ExpenseListViewModel() }
+                viewModel { ExpenseListViewModel(get()) }
                 viewModel { UserProfileViewModel(get(), get(), WeakReference(this@ExpenseReporterApplication)) }
                 viewModel { ManagerSelectionViewModel(get(), get()) }
                 viewModel { DeveloperViewModel(get()) }
