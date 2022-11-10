@@ -37,8 +37,7 @@ fun ExpenseCard(
             bottom = 6.dp),
         elevation = 8.dp,
         onClick = {
-            val json = Base64.getEncoder().encodeToString(expense.toJson().toByteArray())
-            onEditChange(json)
+            onEditChange(expense.expenseId)
         }
     ){
         Column(
@@ -155,8 +154,7 @@ fun ExpenseCardPreview() {
         expenseType = "Hotel",
         date = 1668026647
     )
-    val onSelected: (String) -> Unit = { _ : String -> }
-    val onEditChange: (String) -> Unit = { _ : String -> }
+    val onEditChange: (String) -> Unit = { _: String -> }
     val onDeleteChange: (String) -> Boolean  = { _: String -> false }
     val scaffoldState:ScaffoldState = rememberScaffoldState()
     val coRouteScope = rememberCoroutineScope()

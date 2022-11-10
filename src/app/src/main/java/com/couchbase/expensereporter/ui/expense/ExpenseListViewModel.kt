@@ -23,4 +23,13 @@ class ExpenseListViewModel(
             expenseFlow = repository.getExpenses(reportId)
         }
     }
+
+    val delete: (String) -> Boolean = { documentId: String ->
+        var didDelete = false
+        viewModelScope.launch(Dispatchers.IO){
+            didDelete = repository.delete(documentId)
+        }
+        didDelete
+    }
+
 }

@@ -178,8 +178,8 @@ class MainActions(navController: NavHostController) {
         navController.navigate("${MainDestinations.EXPENSE_LIST_ROUTE}/$reportId")
     }
 
-    val navigateToExpenseEditor:(String, String) -> Unit = { reportId: String, expense: String ->
-        navController.navigate("${MainDestinations.EXPENSE_EDITOR_ROUTE}/$reportId/$expense")
+    val navigateToExpenseEditor:(String) -> Unit = { expenseId: String ->
+        navController.navigate("${MainDestinations.EXPENSE_EDITOR_ROUTE}/$expenseId")
     }
 
     val navigateToManagerListSelector: (String) -> Unit = { reportId: String ->

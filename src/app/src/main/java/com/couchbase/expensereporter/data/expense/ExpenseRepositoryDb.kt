@@ -139,4 +139,23 @@ class ExpenseRepositoryDb(
             return@withContext resultCount
         }
     }
+
+    override suspend fun delete(documentId: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            var result = false
+            try {
+                val db = DatabaseProvider.getInstance(context).reportDatabase
+                db?.let { database ->
+                    val document = database.getDocument(documentId)
+                    document?.let { doc ->
+                        db.delete(doc)
+                        result = true
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                Log.e(e.message, e.stackTraceToString())
+            }
+            return@withContext result
+        }
+    }
 }
