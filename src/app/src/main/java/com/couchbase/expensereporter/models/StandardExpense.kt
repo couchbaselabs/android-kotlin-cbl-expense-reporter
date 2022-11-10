@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.text.DecimalFormat
 import java.util.*
 
 @Keep
@@ -47,6 +48,10 @@ class StandardExpense(
         documentType,
         amount)
 
+    fun expenseToString() : String {
+        var formatter = DecimalFormat("#,###.##")
+        return formatter.format(amount)
+    }
 
     fun toJson(): String {
         return Json.encodeToString(this)

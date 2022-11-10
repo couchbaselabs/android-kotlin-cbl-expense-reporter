@@ -118,7 +118,6 @@ fun ReportCard(report: Report,
                     color = MaterialTheme.colors.onSurface
                 )
             }
-
             Row( modifier = Modifier.fillMaxWidth()) {
                 Text(
                     maxLines = 3,
