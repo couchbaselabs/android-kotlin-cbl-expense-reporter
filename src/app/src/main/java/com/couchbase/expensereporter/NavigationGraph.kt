@@ -13,6 +13,8 @@ import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoView
 import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoViewModel
 import com.couchbase.expensereporter.ui.developer.DeveloperView
 import com.couchbase.expensereporter.ui.developer.DeveloperViewModel
+import com.couchbase.expensereporter.ui.expense.ExpenseEditorView
+import com.couchbase.expensereporter.ui.expense.ExpenseEditorViewModel
 import com.couchbase.expensereporter.ui.expense.ExpenseListView
 import com.couchbase.expensereporter.ui.expense.ExpenseListViewModel
 import com.couchbase.expensereporter.ui.login.LoginView
@@ -47,9 +49,9 @@ object MainDestinations {
     const val EXPENSE_LIST_ROUTE = "expenseList"
     const val EXPENSE_LIST_KEY_ID = "reportId"
 
-    const val EXPENSE_EDITOR_ROUTE_PATH = "expenseEditor/{reportId}/{expense}"
+    const val EXPENSE_EDITOR_ROUTE_PATH = "expenseEditor/{reportId}/{expenseId}"
     const val EXPENSE_EDITOR_ROUTE = "expenseEditor"
-    const val EXPENSE_EDITOR_KEY_ID = "expense"
+    const val EXPENSE_EDITOR_KEY_ID = "expenseId"
 }
 
 @Composable
@@ -61,6 +63,7 @@ fun NavigationGraph (
     startDestination: String = MainDestinations.LOGIN_ROUTE) {
 
     val actions = remember(navController) { MainActions(navController) }
+
     NavHost(navController = navController,
         startDestination = startDestination) {
 
@@ -122,6 +125,33 @@ fun NavigationGraph (
             }
         }
 
+        composable(MainDestinations.EXPENSE_EDITOR_ROUTE_PATH) { backstackEntry ->
+            val rId = backstackEntry.arguments?.getString(MainDestinations.REPORT_KEY_ID)
+            val expId = backstackEntry.arguments?.getString(MainDestinations.EXPENSE_EDITOR_KEY_ID)
+            rId?.let { reportId ->
+                expId?.let { expenseId ->
+                    val viewModel = getViewModel<ExpenseEditorViewModel>()
+
+                    //set values so when view comes into memory we already have data ready
+                    //make sure to run this on Dispatcher.IO instead of main thread
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            //update this code later
+                            viewModel.reportIdState.value = reportId
+                            viewModel.expenseId(expenseId)
+                        }
+                    }
+                    //update to call the editor
+                    ExpenseEditorView(
+                        viewModel = viewModel,
+                        actions.upPress,
+                        scaffoldState = scaffoldState,
+                        scope = scope
+                    )
+                }
+            }
+        }
+
         composable(MainDestinations.USERPROFILE_ROUTE) {
             UserProfileView(
                 openDrawer = openDrawer,
@@ -178,8 +208,8 @@ class MainActions(navController: NavHostController) {
         navController.navigate("${MainDestinations.EXPENSE_LIST_ROUTE}/$reportId")
     }
 
-    val navigateToExpenseEditor:(String) -> Unit = { expenseId: String ->
-        navController.navigate("${MainDestinations.EXPENSE_EDITOR_ROUTE}/$expenseId")
+    val navigateToExpenseEditor:(String, String) -> Unit = { reportId: String, expenseId: String ->
+        navController.navigate("${MainDestinations.EXPENSE_EDITOR_ROUTE}/$reportId/$expenseId")
     }
 
     val navigateToManagerListSelector: (String) -> Unit = { reportId: String ->

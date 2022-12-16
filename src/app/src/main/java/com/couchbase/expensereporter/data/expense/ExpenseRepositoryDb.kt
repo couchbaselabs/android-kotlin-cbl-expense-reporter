@@ -3,6 +3,7 @@ package com.couchbase.expensereporter.data.expense
 import android.content.Context
 import android.util.Log
 import com.couchbase.expensereporter.data.DatabaseProvider
+import com.couchbase.expensereporter.models.ExpenseTypeDao
 import com.couchbase.expensereporter.models.StandardExpense
 import com.couchbase.expensereporter.models.StandardExpenseDao
 import com.couchbase.expensereporter.services.AuthenticationService
@@ -20,14 +21,13 @@ import kotlinx.serialization.json.Json
 import java.util.*
 
 class ExpenseRepositoryDb(
-    private val context: Context
+    private val databaseProvider: DatabaseProvider
 ) : ExpenseRepository {
-    private val databaseProvider: DatabaseProvider = DatabaseProvider.getInstance(context)
 
     override suspend fun getExpenses(reportId: String): Flow<List<StandardExpense>>? {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 // NOTE - the as method is a also a keyword in Kotlin, so it must be escaped using
                 // `as` - this will probably break intellisense, so it will act like the where
                 // method isn't available  work around is to do your entire statement without the as
@@ -73,12 +73,12 @@ class ExpenseRepositoryDb(
         return expenses
     }
 
-    override suspend fun get(reportId: String, expenseId: String): StandardExpense {
+    override suspend fun get(reportId: String, documentId: String): StandardExpense {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
-                    val doc = database.getDocument(reportId)
+                    val doc = database.getDocument(documentId)
                     doc?.let { document ->
                         val json = document.toJSON()
                         json?.let { expenseJson ->
@@ -92,7 +92,7 @@ class ExpenseRepositoryDb(
             }
 
             return@withContext StandardExpense(
-                expenseId = expenseId,
+                expenseId = documentId,
                 reportId = reportId,
                 documentType = "expense",
             )
@@ -102,7 +102,7 @@ class ExpenseRepositoryDb(
     override suspend fun save(document: StandardExpense) {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val json = Json.encodeToString(document)
                     val doc = MutableDocument(document.reportId, json)
@@ -128,7 +128,7 @@ class ExpenseRepositoryDb(
                         .from(DataSource.database(database))
                         .where(
                             Expression.property("documentType")
-                                .equalTo(Expression.string("expenseType"))
+                                .equalTo(Expression.string("expense"))
                         )
                     val results = query.execute().allResults()
                     resultCount = results[0].getInt("count")
@@ -144,7 +144,7 @@ class ExpenseRepositoryDb(
         return withContext(Dispatchers.IO) {
             var result = false
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val document = database.getDocument(documentId)
                     document?.let { doc ->

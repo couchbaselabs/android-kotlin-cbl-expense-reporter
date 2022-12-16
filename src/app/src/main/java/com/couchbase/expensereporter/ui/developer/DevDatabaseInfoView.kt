@@ -44,6 +44,8 @@ fun DevDatabaseInfoView(
                     viewModel.numberOfUserProfiles.value,
                     viewModel.numberOfReports.value,
                     viewModel.numberOfManagers.value,
+                    viewModel.numberOfExpenses.value,
+                    viewModel.numberOfExpenseTypes.value
                 )
             }
         }
@@ -61,6 +63,8 @@ fun DeveloperInfoWidget(
     numberOfUserProfiles: Int,
     numberOfReports: Int,
     numberOfManagers: Int,
+    numberOfExpenses: Int,
+    numberOfExpenseTypes: Int,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -233,6 +237,27 @@ fun DeveloperInfoWidget(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                Text("Expenses Count", fontWeight = FontWeight.Bold)
+            }
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("$numberOfExpenses")
+            }
+            Divider(
+                color = Color.LightGray,
+                thickness = 2.dp,
+                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+            )
+        }
+        item {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text("Managers Count", fontWeight = FontWeight.Bold)
             }
             Row(
@@ -241,6 +266,28 @@ fun DeveloperInfoWidget(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("$numberOfManagers")
+            }
+            Divider(
+                color = Color.LightGray,
+                thickness = 2.dp,
+                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+            )
+        }
+
+        item {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Expense Type Count", fontWeight = FontWeight.Bold)
+            }
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("$numberOfExpenseTypes")
             }
             Divider(
                 color = Color.LightGray,
@@ -262,7 +309,9 @@ fun DeveloperInfoWidgetPreview() {
     val currentDepartment = "Engineering"
     val numberOfUserProfiles = 1000000000
     val numberOfReports = 1000000000
+    val numberOfExpenses = 100000000
     val numberOfManagers = 100000000
+    val numberOfExpenseTypes = 1000000
 
     DeveloperInfoWidget(
         reportDatabaseName = reportDatabaseName,
@@ -273,6 +322,8 @@ fun DeveloperInfoWidgetPreview() {
         currentDepartment = currentDepartment,
         numberOfUserProfiles = numberOfUserProfiles,
         numberOfReports = numberOfReports,
-        numberOfManagers = numberOfManagers
+        numberOfManagers = numberOfManagers,
+        numberOfExpenses = numberOfExpenses,
+        numberOfExpenseTypes = numberOfExpenseTypes
     )
 }

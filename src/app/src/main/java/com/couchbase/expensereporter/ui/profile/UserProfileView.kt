@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
 import com.couchbase.expensereporter.ui.components.AppBar
 import com.couchbase.expensereporter.ui.components.ProfilePicture
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
@@ -43,6 +45,14 @@ fun UserProfileView(
     viewModel: UserProfileViewModel
 ) {
 
+    val givenName = viewModel.givenName.value
+    val surname = viewModel.surname.value
+    val jobTitle = viewModel.jobTitle.value
+    val profilePic = viewModel.profilePic.value
+    val emailAddress = viewModel.emailAddress.value
+    val department = viewModel.department.value
+    val toastMessage = viewModel.toastMessage.value
+
     ExpenseReporterTheme {
         // A surface container using the 'background' color from the theme
         Scaffold(scaffoldState = scaffoldState,
@@ -54,21 +64,23 @@ fun UserProfileView(
         {
             Surface(
                 color = MaterialTheme.colors.background,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             )
             {
                 UserProfileFormWidget(
-                    viewModel.givenName.value,
+                    givenName,
                     viewModel.onGivenNameChanged,
-                    viewModel.surname.value,
+                    surname,
                     viewModel.onSurnameChanged,
-                    viewModel.jobTitle.value,
+                    jobTitle,
                     viewModel.onJobTitleChanged,
-                    viewModel.profilePic.value,
+                    profilePic,
                     viewModel.onProfilePicChanged,
-                    viewModel.emailAddress.value,
-                    viewModel.department.value,
-                    viewModel.toastMessage.value,
+                    emailAddress,
+                    department,
+                    toastMessage,
                     viewModel.onSave,
                     viewModel.clearToastMessage
                 )
@@ -101,6 +113,7 @@ fun UserProfileFormWidget(
     val firstNameResource = "givenName"
     val lastNameResource = "surname"
     val jobTitleResource = "jobTitle"
+    val departmentResource = "department"
     val saveResource = "save"
 
     //hide the keyboard when we are done editing

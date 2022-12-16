@@ -13,9 +13,8 @@ import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.models.ManagerDao
 import com.couchbase.expensereporter.models.Manager
 
-class ManagerRepositoryDb(context: Context)
+class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
     : ManagerRepository {
-    private val databaseProvider: DatabaseProvider = DatabaseProvider.getInstance(context)
 
     override val managerDatabaseName: String?
         get() = databaseProvider.startingDatabase?.name

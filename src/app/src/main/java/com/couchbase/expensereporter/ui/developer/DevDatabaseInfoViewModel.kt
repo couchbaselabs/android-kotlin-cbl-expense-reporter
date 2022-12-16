@@ -4,6 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.couchbase.expensereporter.data.KeyValueRepository
+import com.couchbase.expensereporter.data.expense.ExpenseRepository
+import com.couchbase.expensereporter.data.expense.ExpenseRepositoryDb
+import com.couchbase.expensereporter.data.expenseTypes.ExpenseTypeRepository
 import com.couchbase.expensereporter.data.manager.ManagerRepository
 import com.couchbase.expensereporter.data.report.ReportRepository
 import com.couchbase.expensereporter.services.AuthenticationService
@@ -15,6 +18,8 @@ class DevDatabaseInfoViewModel(
     private val userProfileRepository: KeyValueRepository,
     private val reportRepository: ReportRepository,
     private val managerRepository: ManagerRepository,
+    private val expenseTypeRepository: ExpenseTypeRepository,
+    private val expenseRepository: ExpenseRepository,
     private val authenticationService: AuthenticationService
 )
     : ViewModel() {
@@ -30,12 +35,16 @@ class DevDatabaseInfoViewModel(
     var numberOfReports = mutableStateOf(0)
     var numberOfExpenses = mutableStateOf(0)
     var numberOfManagers = mutableStateOf(0)
+    var numberOfExpenseTypes = mutableStateOf(0)
+
     init {
        viewModelScope.launch{
            updateUserProfileInfo()
            updateUserProfileCount()
            updateReportCount()
            updateManagerCount()
+           updateExpenseTypesCount()
+           updateExpensesCount()
        }
     }
 
@@ -45,6 +54,27 @@ class DevDatabaseInfoViewModel(
                 currentUsername.value = currentUser.username
                 currentDepartment.value = currentUser.department
 
+            }
+        }
+    }
+    private suspend fun updateExpenseTypesCount() {
+        viewModelScope.launch(Dispatchers.IO){
+            val count = expenseTypeRepository.count()
+            if (count > 0){
+                withContext(Dispatchers.Main){
+                    numberOfExpenseTypes.value = count
+                }
+            }
+        }
+    }
+
+    private suspend fun updateExpensesCount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val count = expenseRepository.count()
+            if (count > 0) {
+                withContext(Dispatchers.Main) {
+                    numberOfExpenses.value = count
+                }
             }
         }
     }

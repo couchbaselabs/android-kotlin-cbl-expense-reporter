@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +19,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.couchbase.expensereporter.MainDestinations
 import com.couchbase.expensereporter.NavigationGraph
-import com.couchbase.expensereporter.data.KeyValueRepository
 import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.expensereporter.ui.components.Drawer
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
@@ -27,9 +26,13 @@ import com.couchbase.expensereporter.ui.theme.ExpenseReporterTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val profileViewModel: UserProfileViewModel by viewModel()
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,16 +41,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val authService: AuthenticationService by inject()
-                val userProfileRepository: KeyValueRepository by inject()
                 val menuResource = "btnMenu"
-                val mainViewModel = getViewModel<MainViewModel>()
-
-                //used for drawing profile in drawer
-                var profileViewModel: UserProfileViewModel? = null
 
                 fun logout() {
                     //todo handle turning off replication
-                    profileViewModel = null
                     authService.logout()
                 }
 
@@ -57,15 +54,7 @@ class MainActivity : ComponentActivity() {
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
                 val openDrawer = {
                     scope.launch {
-                        if (profileViewModel == null) {
-                            profileViewModel = UserProfileViewModel(
-                                repository = userProfileRepository,
-                                authService = authService,
-                                mainViewModel.context
-                            )
-                        } else {
-                            profileViewModel?.updateUserProfileInfo()
-                        }
+                        profileViewModel.updateUserProfileInfo()
                         drawerState.open()
                     }
                 }
@@ -76,19 +65,27 @@ class MainActivity : ComponentActivity() {
                             scaffoldState.snackbarHostState
                         }) {
                         ModalDrawer(
-                            modifier = Modifier.semantics { contentDescription = menuResource },
+                            modifier = Modifier
+                                .semantics { contentDescription = menuResource }
+                                .padding(it),
                             drawerState = drawerState,
                             gesturesEnabled = drawerState.isOpen,
                             drawerContent = {
+                                val givenName = profileViewModel.givenName.value
+                                val surname = profileViewModel.surname.value
+                                val emailAddress = profileViewModel.emailAddress.value
+                                val profilePic = profileViewModel.profilePic.value
+                                val department = profileViewModel.department.value
+
                                 Drawer(
                                     modifier = Modifier.semantics {
                                         contentDescription = "{$menuResource}1"
                                     },
-                                    firstName = profileViewModel?.givenName?.value,
-                                    lastName = profileViewModel?.surname?.value,
-                                    email = profileViewModel?.emailAddress?.value,
-                                    department = profileViewModel?.department?.value,
-                                    profilePicture = profileViewModel?.profilePic?.value,
+                                    firstName = givenName,
+                                    lastName = surname,
+                                    email = emailAddress,
+                                    department = department,
+                                    profilePicture = profilePic,
                                     onClicked = { route ->
                                         scope.launch {
                                             drawerState.close()

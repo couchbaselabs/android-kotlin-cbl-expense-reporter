@@ -1,14 +1,25 @@
 package com.couchbase.expensereporter.models
 
-data class ExpenseTypesDao(
-    val items: ExpenseTypes
+import androidx.annotation.Keep
+import kotlinx.serialization.Serializable
+
+typealias ExpenseTypesCol = ArrayList<ExpenseTypes>
+
+@Keep
+@Serializable
+data class ExpenseTypeDao(
+    val item: ExpenseTypes
 )
 
+@Keep
+@Serializable
 data class ExpenseTypes (
     val documentId: String,
     val documentType: String,
     val expenseTypes: List<ExpenseType>
 )
 
+@Keep
+@Serializable
 data class ExpenseType(val name: String,
                        val subTypes: List<String>)

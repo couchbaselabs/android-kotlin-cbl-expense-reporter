@@ -9,11 +9,11 @@ import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.services.AuthenticationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.ref.WeakReference
 
 class LoginViewModel(
     private val authenticationService: AuthenticationService,
-    private val context: WeakReference<Context>): ViewModel() {
+    private val databaseProvider: DatabaseProvider
+) : ViewModel() {
 
     private val _username = MutableLiveData("")
     val username: LiveData<String> = _username
@@ -33,19 +33,17 @@ class LoginViewModel(
     val isError: LiveData<Boolean> = _isError
 
     fun login(): Boolean {
-        context.get()?.let { itContext ->
-            _username.value?.let { uname ->
-                _password.value?.let { pwd ->
-                    if (authenticationService.authenticatedUser(username = uname, password = pwd)) {
-                        _isError.value = false
-                        val currentUser = authenticationService.getCurrentUser()
-                        viewModelScope.launch(Dispatchers.IO) {
-                            //initialize database if needed
-                            DatabaseProvider.getInstance(itContext).initializeDatabases(currentUser)
-                            //replicatorService.updateAuthentication(isReset = false)
-                        }
-                        return true
+        _username.value?.let { uname ->
+            _password.value?.let { pwd ->
+                if (authenticationService.authenticatedUser(username = uname, password = pwd)) {
+                    _isError.value = false
+                    val currentUser = authenticationService.getCurrentUser()
+                    viewModelScope.launch(Dispatchers.IO) {
+                        //initialize database if needed
+                        databaseProvider.initializeDatabases(currentUser)
+                        //replicatorService.updateAuthentication(isReset = false)
                     }
+                    return true
                 }
             }
         }

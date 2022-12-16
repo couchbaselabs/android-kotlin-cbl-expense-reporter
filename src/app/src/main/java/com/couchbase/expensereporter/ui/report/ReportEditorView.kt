@@ -41,7 +41,9 @@ fun ReportEditorView(
         {
             Surface(
                 color = MaterialTheme.colors.background,
-                modifier = Modifier.fillMaxSize()) {
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)) {
 
                 viewModel.navigateUpCallback = navigateUp
                 viewModel.navigateToManagerSelection = navigateToManagerSelection

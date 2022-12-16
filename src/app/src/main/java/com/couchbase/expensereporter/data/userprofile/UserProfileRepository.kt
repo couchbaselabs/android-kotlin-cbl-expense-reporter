@@ -8,15 +8,16 @@ import com.couchbase.lite.MutableDocument
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class UserProfileRepository(var context: Context) : KeyValueRepository {
+class UserProfileRepository(
+    var databaseProvider: DatabaseProvider) : KeyValueRepository {
     private val documentType = "user"
 
     override fun reportDatabaseName(): String {
-        return DatabaseProvider.getInstance(context).currentReportDatabaseName
+        return databaseProvider.currentReportDatabaseName
     }
 
     override fun reportDatabaseLocation(): String? {
-        return DatabaseProvider.getInstance(context).reportDatabase?.path
+        return databaseProvider.reportDatabase?.path
     }
 
     override suspend fun get(currentUser: String): Map<String, Any> {
@@ -24,7 +25,7 @@ class UserProfileRepository(var context: Context) : KeyValueRepository {
             val results = HashMap<String, Any>()  //  <1>
             results["email"] = currentUser as Any  //  <2>
 
-            val database = DatabaseProvider.getInstance(context).reportDatabase
+            val database = databaseProvider.reportDatabase
             database?.let { db ->
                 val documentId = getCurrentUserDocumentId(currentUser)
                 val doc = db.getDocument(documentId)  //  <3>
@@ -56,7 +57,7 @@ class UserProfileRepository(var context: Context) : KeyValueRepository {
             val documentId = getCurrentUserDocumentId(email)
             val mutableDocument = MutableDocument(documentId, data)
             try {
-                val database = DatabaseProvider.getInstance(context).reportDatabase
+                val database = databaseProvider.reportDatabase
                 database?.save(mutableDocument)
             } catch (e: CouchbaseLiteException) {
                 android.util.Log.e(e.message, e.stackTraceToString())
@@ -68,7 +69,7 @@ class UserProfileRepository(var context: Context) : KeyValueRepository {
 
     override suspend fun count(): Int {
         return withContext(Dispatchers.IO) {
-            val database = DatabaseProvider.getInstance(context).reportDatabase
+            val database = databaseProvider.reportDatabase
             database?.let { db ->
                 val query = "SELECT COUNT(*) AS count FROM _ WHERE documentType='$documentType'"
                 val results = db.createQuery(query).execute().allResults()
@@ -81,7 +82,7 @@ class UserProfileRepository(var context: Context) : KeyValueRepository {
     suspend fun delete(documentId: String): Boolean {
         return withContext(Dispatchers.IO) {
             var result = false
-            val database = DatabaseProvider.getInstance(context).reportDatabase
+            val database = databaseProvider.reportDatabase
             database?.let { db ->
                 val document = db.getDocument(documentId)
                 document?.let {

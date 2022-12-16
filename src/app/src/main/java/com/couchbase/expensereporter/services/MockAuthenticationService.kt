@@ -1,33 +1,37 @@
 package com.couchbase.expensereporter.services
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.couchbase.expensereporter.models.User
 
 class MockAuthenticationService
     : AuthenticationService {
-    private var _user: User? = null
+    private var _user = MutableLiveData<User?>()
     private var _mockUsers = HashMap<String, User>()
 
+    override val currentUser: LiveData<User?> = _user
+
     override fun getCurrentUser(): User {
-        return _user?: User("", "", "")
+        return _user.value ?: User("", "", "")
     }
 
     override fun authenticatedUser(username: String, password: String): Boolean {
         return if (_mockUsers.containsKey(username)){
             val user = _mockUsers[username]
             if (user?.password == password){
-                _user = user
+                _user.value = user
                 true
             } else {
                 false
             }
         } else {
-            _user = User(username = username, password = password, department = "Engineering")
+            _user.value = User(username = username, password = password, department = "Engineering")
             return true
         }
     }
 
     override fun logout() {
-        _user = null
+        _user.value = null
     }
 
     init {

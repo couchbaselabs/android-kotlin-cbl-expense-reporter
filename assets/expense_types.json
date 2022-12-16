@@ -4,50 +4,91 @@
 		"documentType": "expenseTypes",
 		"expenseTypes": [
 			{
-				"name": "Admin",
-				"subTypes": [
-					"Business Cards",
-					"Office Supplies",
-					"Social Media Ads"
-				]
-			},
-			{
 				"name": "Communications",
 				"subTypes": [
-					"Cell Phone",
-					"Internet"
+					"Cell Phone & Internet",
+					"Internet Access"
 				]
 			},
 			{
-				"name": "Education",
+				"name": "Meals and Entertainment",
 				"subTypes": [
-					"Book",
-					"Training"
+					"Company Meetings",
+					"Customer Entertainment",
+					"Customer Meals",
+					"Employee Group Meals",
+					"Gifts",
+					"Office Snacks/Beverages",
+					"Travel Meals-Breakfast",
+					"Travel Meals-Lunch",
+					"Travel Meals-Dinner",
+					"Travel Meals-Snack"
 				]
 			},
 			{
-				"name": "Software",
+				"name": "Office",
 				"subTypes": [
-					"License",
-					"Retail"
+					"Computer Asset >  $1,000",
+					"Computer Hardware <  $1,000",
+					"Computer Software",
+					"Funiture",
+					"Newspapers/Books/Magaizines",
+					"Office Equipment",
+					"Office Supplies",
+					"Postage & Shipping",
+					"Printing/Photocopying",
+					"Tradeshow Freight"
 				]
 			},
 			{
-				"name": "Subscription",
+				"name": "Other",
 				"subTypes": [
-					"Subscription"
+					"Advertising",
+					"Computer Accessories",
+					"Events",
+					"Currency Exchange Fees",
+					"Dues, Memberships",
+					"Facility Repair & Maintenance",
+					"Miscellaneous",
+					"Professional Services",
+					"Promotional Items",
+					"Recruiting",
+					"Relocation",
+					"Seminars & Training",
+					"Subscriptions",
+					"Tips/Gratuities",
+					"Trade Shows",
+					"User Meetings & Conferences"
+				]
+			},
+			{
+				"name": "Transportation",
+				"subTypes": [
+					"Bus",
+					"Car Mileage",
+					"Limousine",
+					"Parking",
+					"Subway",
+					"Taxi",
+					"Tolls"
 				]
 			},
 			{
 				"name": "Travel",
 				"subTypes": [
 					"Airfare",
+					"Airline Fee",
+					"Booking Fees",
+					"Car Rental",
+					"Car Rental - Fuel",
+					"Car Rental - Insurance",
 					"Hotel",
-					"Meals",
-					"Mileage",
-					"Ground Transportation"
+					"Hotel Tax",
+					"Lodging - Other",
+					"Train"
 				]
 			}
+
 		]
 	}
 ]

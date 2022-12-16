@@ -118,8 +118,11 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:$google_accompanist_version"
 
     // Dependency injection
-    implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+
     implementation "io.insert-koin:koin-androidx-compose:$koin_version_compose"
 
     //couchbase lite for kotlin

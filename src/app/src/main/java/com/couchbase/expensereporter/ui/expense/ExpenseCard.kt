@@ -22,7 +22,7 @@ import java.util.*
 @Composable
 fun ExpenseCard(
     expense: StandardExpense,
-    onEditChange: (String) -> Unit,
+    onEditChange: (String, String) -> Unit,
     onDeleteChange: (String) -> Boolean,
     scope: CoroutineScope,
     scaffoldState: ScaffoldState
@@ -37,7 +37,7 @@ fun ExpenseCard(
             bottom = 6.dp),
         elevation = 8.dp,
         onClick = {
-            onEditChange(expense.expenseId)
+            onEditChange(expense.reportId, expense.expenseId)
         }
     ){
         Column(
@@ -73,7 +73,7 @@ fun ExpenseCard(
                         onDismissRequest = { expanded = false })
                     {
                         DropdownMenuItem(onClick = {
-                            onEditChange(expense.expenseId)
+                            onEditChange(expense.reportId, expense.expenseId)
                         }) {
                             Text("Edit")
                         }
@@ -154,7 +154,7 @@ fun ExpenseCardPreview() {
         expenseType = "Hotel",
         date = 1668026647
     )
-    val onEditChange: (String) -> Unit = { _: String -> }
+    val onEditChange: (String, String) -> Unit = { _: String, _: String -> }
     val onDeleteChange: (String) -> Boolean  = { _: String -> false }
     val scaffoldState:ScaffoldState = rememberScaffoldState()
     val coRouteScope = rememberCoroutineScope()

@@ -4,25 +4,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.couchbase.expensereporter.models.StandardExpense
-import com.couchbase.expensereporter.ui.components.AddButton
-import com.couchbase.expensereporter.ui.components.AppBar
-import com.couchbase.expensereporter.ui.components.HorizontalDottedProgressBar
-import com.couchbase.expensereporter.ui.components.NoItemsFound
+import com.couchbase.expensereporter.ui.components.*
 import com.couchbase.expensereporter.ui.theme.ExpenseReporterTheme
 import kotlinx.coroutines.CoroutineScope
+import java.util.*
 
 @Composable
 fun ExpenseListView(
     viewModel: ExpenseListViewModel,
     navigateUp: () -> Unit,
-    navigateToExpenseEditor: (String) -> Unit,
+    navigateToExpenseEditor: (String, String) -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     scope: CoroutineScope = rememberCoroutineScope())
 {
@@ -35,7 +31,13 @@ fun ExpenseListView(
                     navigationIcon = Icons.Filled.ArrowBack,
                     navigationOnClick = { navigateUp() })
             },
-            floatingActionButton = { AddButton(navigateToExpenseEditor) }
+            floatingActionButton = {
+                AddSubItemButton(
+                    onNavClick = {
+                    navigateToExpenseEditor(viewModel.reportId,
+                        UUID.randomUUID().toString())
+                })
+            }
         )
         {
             Surface(
@@ -74,7 +76,7 @@ fun ExpenseListView(
 fun ExpenseList(
     items: List<StandardExpense>,
     isLoading: Boolean,
-    onEditChange: (String) -> Unit,
+    onEditChange: (String, String) -> Unit,
     onDeleteChange: (String) -> Boolean,
     scaffoldState: ScaffoldState,
     scope: CoroutineScope,

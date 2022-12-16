@@ -2,14 +2,13 @@ package com.couchbase.expensereporter.data
 
 import android.content.Context
 import com.couchbase.expensereporter.models.User
-import com.couchbase.expensereporter.util.Singleton
 import com.couchbase.lite.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-class DatabaseProvider private constructor(private val context: Context) {
+class DatabaseProvider (private val context: Context) {
 
     var reportDatabase: Database? = null
     var startingDatabase: Database? = null
@@ -148,6 +147,4 @@ class DatabaseProvider private constructor(private val context: Context) {
             stream.close()
         }
     }
-
-    companion object : Singleton<DatabaseProvider, Context>(::DatabaseProvider)
 }

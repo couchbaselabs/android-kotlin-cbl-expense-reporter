@@ -19,17 +19,17 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ReportRepositoryDb (
-    private val context: Context,
+    private val databaseProvider: DatabaseProvider,
     private val authenticationService: AuthenticationService)
     : ReportRepository {
 
     override val databaseName: String
-        get() = DatabaseProvider.getInstance(context).currentReportDatabaseName
+        get() = databaseProvider.currentReportDatabaseName
 
     override suspend fun get(documentId: String): Report {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val doc = database.getDocument(documentId)
                     doc?.let { document ->
@@ -60,7 +60,7 @@ class ReportRepositoryDb (
     override suspend fun getDocuments(): Flow<List<Report>> {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 // NOTE - the as method is a also a keyword in Kotlin, so it must be escaped using
                 // `as` - this will probably break auto complete suggestion, so it will act like the where
                 // method isn't available  work around is to do your entire statement without the as
@@ -112,7 +112,7 @@ class ReportRepositoryDb (
         return withContext(Dispatchers.IO) {
             var result = false
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val encoder = Json { encodeDefaults = true }
                     val json = encoder.encodeToString(document)
@@ -131,7 +131,7 @@ class ReportRepositoryDb (
         return withContext(Dispatchers.IO) {
             var result = false
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val document = database.getDocument(documentId)
                     document?.let { doc ->
@@ -150,7 +150,7 @@ class ReportRepositoryDb (
         return withContext(Dispatchers.IO) {
             var count = 0
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 db?.let { database ->
                     val query = QueryBuilder  // 1
                         .select(
@@ -172,7 +172,7 @@ class ReportRepositoryDb (
     override suspend fun updateManager(documentId: String, manager: Manager) {
         return withContext(Dispatchers.IO) {
             try {
-                val db = DatabaseProvider.getInstance(context).reportDatabase
+                val db = databaseProvider.reportDatabase
                 val document = get(documentId)
                 var updateDoc = document.copy(approvalManager = manager)
                 db?.let { database ->
