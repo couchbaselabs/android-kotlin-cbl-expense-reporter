@@ -39,20 +39,6 @@ class ExpenseEditorViewModel(
     val errorMessageState = mutableStateOf("")
 
     init {
-        viewModelScope.launch {
-            val expenseTypesCol = expenseTypeRepository.get()
-            if (expenseTypesCol.isNotEmpty()) {
-                expenseTypes = expenseTypesCol[0].expenseTypes
-                val parentExpenseTypes = mutableListOf("")
-                expenseTypes.map{ parentExpenseTypes.add(it.name) }
-
-                withContext(Dispatchers.Main) {
-                    parentExpenseTypes.removeAt(0)
-                    parentExpensesTypeState = parentExpenseTypes.toMutableStateList()
-                    childExpensesTypeState = expenseTypes[0].subTypes.toMutableStateList()
-                }
-            }
-        }
     }
 
     var navigateUpCallback: () -> Unit = { }
@@ -113,11 +99,24 @@ class ExpenseEditorViewModel(
 
     fun loadExpense() {
         viewModelScope.launch(Dispatchers.IO) {
+
+            val expenseTypesCol = expenseTypeRepository.get()
+            if (expenseTypesCol.isNotEmpty()) {
+                expenseTypes = expenseTypesCol[0].expenseTypes
+                val parentExpenseTypes = mutableListOf("")
+                expenseTypes.map{ parentExpenseTypes.add(it.name) }
+
+                withContext(Dispatchers.Main) {
+                    parentExpenseTypes.removeAt(0)
+                    parentExpensesTypeState = parentExpenseTypes.toMutableStateList()
+                    childExpensesTypeState = expenseTypes[0].subTypes.toMutableStateList()
+                }
+            }
+
             val expenseReport = expenseRepository.get(
                 reportId = reportIdState.value,
                 documentId = expenseReportIdState.value
             )
-            withContext(Dispatchers.Main) {
                 expenseReportState.value = expenseReport
                 expenseReport.date?.let { date ->
                     val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
@@ -143,7 +142,6 @@ class ExpenseEditorViewModel(
                         expenseType = childExpensesTypeState[0]
                     )
                     expenseReportState.value = r
-                }
             }
         }
     }

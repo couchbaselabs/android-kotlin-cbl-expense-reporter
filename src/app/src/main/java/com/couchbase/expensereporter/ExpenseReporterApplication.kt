@@ -65,15 +65,15 @@ class ExpenseReporterApplication
                 // ** DO NOT listen to the NO cast needed warnings - removing the as statement will
                 // ** result in the application not functioning correctly
                 singleOf(::DatabaseProvider)
-
                 singleOf(::MockAuthenticationService) bind AuthenticationService::class
+                singleOf(::ReplicatorProvider)
                 singleOf(::UserProfileRepository) bind KeyValueRepository::class
                 singleOf(::ReportRepositoryDb) bind ReportRepository::class
                 singleOf(::ManagerRepositoryDb) bind ManagerRepository::class
                 singleOf(::ExpenseRepositoryDb) bind ExpenseRepository::class
                 singleOf(::ExpenseTypeRepositoryDb) bind ExpenseTypeRepository::class
 
-                singleOf(::ReplicatorProvider)
+
 
                 viewModelOf(::LoginViewModel)
                 viewModelOf(::MainViewModel)

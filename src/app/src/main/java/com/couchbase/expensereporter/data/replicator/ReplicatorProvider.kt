@@ -19,7 +19,7 @@ class ReplicatorProvider(
         }
         //CHANGE THE URI TO BE THE LOCATION FROM APP SERVICES - IT SHOULD LOOK SOMETHING LIKE THIS:
         //  wss://<yourhostname>.apps.cloud.couchbase.com:4984/expensereports
-        val urlEndPoint = URLEndpoint(URI("wss://yourhostnamehere.apps.cloud.couchbase.com:4984/expensereports"))
+        val urlEndPoint = URLEndpoint(URI("wss://yourhostname.apps.cloud.couchbase.com:4984/expensereports"))
         val currentUser = authenticationService.currentUser.value
         currentUser?.let { user ->
             val basicAuthenticator = BasicAuthenticator(user.username, user.password.toCharArray())
