@@ -1,12 +1,9 @@
 package com.couchbase.expensereporter.data.expense
 
-import android.content.Context
 import android.util.Log
 import com.couchbase.expensereporter.data.DatabaseProvider
-import com.couchbase.expensereporter.models.ExpenseTypeDao
 import com.couchbase.expensereporter.models.StandardExpense
 import com.couchbase.expensereporter.models.StandardExpenseDao
-import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.lite.*
 import com.couchbase.lite.Function
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +15,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.*
 
 class ExpenseRepositoryDb(
     private val databaseProvider: DatabaseProvider

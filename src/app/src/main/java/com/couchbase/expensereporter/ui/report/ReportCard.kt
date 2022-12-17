@@ -134,7 +134,20 @@ fun ReportCard(report: Report,
                     modifier = Modifier.size(12.dp),
                     tint = MaterialTheme.colors.onSurface)
                 Text(modifier = Modifier.padding(start = 6.dp),
-                    text = report.getReportDateString(),
+                    text = "Report Date: ${report.getReportDateString()}",
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface
+                )
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
+                Icon(
+                    Icons.Default.CalendarToday,
+                    contentDescription = "",
+                    modifier = Modifier.size(12.dp),
+                    tint = MaterialTheme.colors.onSurface)
+                Text(modifier = Modifier.padding(start = 6.dp),
+                    text = "Update Date: ${report.getUpdatedDateString()}",
                     style = MaterialTheme.typography.caption,
                     color = MaterialTheme.colors.onSurface
                 )

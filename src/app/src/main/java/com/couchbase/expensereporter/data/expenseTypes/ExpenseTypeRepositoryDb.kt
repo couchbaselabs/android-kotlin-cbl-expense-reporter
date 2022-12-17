@@ -1,6 +1,5 @@
 package com.couchbase.expensereporter.data.expenseTypes
 
-import android.content.Context
 import android.util.Log
 import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.models.ExpenseTypeDao

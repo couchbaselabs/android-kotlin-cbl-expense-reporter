@@ -1,13 +1,12 @@
 package com.couchbase.expensereporter.data.report
 
-import android.content.Context
 import android.util.Log
 import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.models.Manager
 import com.couchbase.expensereporter.models.Report
-import com.couchbase.expensereporter.models.ReportDao
 import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.lite.*
+import com.couchbase.lite.Function
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,10 +17,10 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class ReportRepositoryDb (
+class ReportRepositoryDb(
     private val databaseProvider: DatabaseProvider,
-    private val authenticationService: AuthenticationService)
-    : ReportRepository {
+    private val authenticationService: AuthenticationService
+) : ReportRepository {
 
     override val databaseName: String
         get() = databaseProvider.currentReportDatabaseName
@@ -43,7 +42,7 @@ class ReportRepositoryDb (
                 Log.e(e.message, e.stackTraceToString())
             }
             val user = authenticationService.getCurrentUser()
-            return@withContext(
+            return@withContext (
                     Report(
                         reportId = documentId,
                         reportDate = System.currentTimeMillis(),
@@ -53,7 +52,7 @@ class ReportRepositoryDb (
                         status = "Draft",
                         isComplete = false
                     )
-                )
+                    )
         }
     }
 
@@ -61,52 +60,56 @@ class ReportRepositoryDb (
         return withContext(Dispatchers.IO) {
             try {
                 val db = databaseProvider.reportDatabase
-
                 db?.let { database ->
-                    val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.status, item.department, item.createdBy, item.approvalManager, SUM(e.amount) as amount FROM _ AS item JOIN _ AS e ON item.reportId = e.reportId WHERE item.documentType=\"report\" AND e.documentType=\"expense\"")
+                    val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.updatedDate, item.status, item.department, item.createdBy, item.approvalManager, 0.0 as amount FROM _ AS item WHERE item.documentType=\"report\"")
+
+                    //val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.updatedDate, item.status, item.department, item.createdBy, item.approvalManager, SUM(e.amount) as amount FROM _ AS item LEFT JOIN _ AS e ON item.reportId = e.reportId WHERE item.documentType=\"report\" AND e.documentType=\"expense\"")
 
                     // create a flow to return the results dynamically as needed - more information on
                     // CoRoutine Flows can be found at
                     // https://developer.android.com/kotlin/flow
-                    val flow = query        // <1>
-                        .queryChangeFlow()  // <1>
-                        .map { qc -> mapQueryChangeToReport(qc) } // <2>
-                        .flowOn(Dispatchers.IO)  // <3>
-                    query.execute()  // <4>
-                    return@withContext flow  // <5>
+                    val flow = query
+                        .queryChangeFlow()
+                        .map { qc -> mapQueryChangeToReport(qc) }
+                        .flowOn(Dispatchers.IO)
+                    query.execute()
+                    return@withContext flow
                 }
             } catch (e: Exception) {
                 Log.e(e.message, e.stackTraceToString())
             }
-            return@withContext  flow { }
+            return@withContext flow { }
         }
     }
 
     private fun mapQueryChangeToReport(queryChange: QueryChange): List<Report> {
-        val documents = mutableListOf<Report>() // 1
+        val documents = mutableListOf<Report>()
         try {
-            queryChange.results?.let { results ->  // 2
-                results.forEach { result ->      // 3
-                    val json = result.toJSON()     // 4
+            queryChange.results?.let { results ->
+                results.forEach { result ->
+                    val json = result.toJSON()
                     val document =
-                        Json.decodeFromString<Report>(json)   // 5
-                    documents.add(document) // 6
+                        Json.decodeFromString<Report>(json)
+                    if (!document.reportId.isNullOrBlank()) {
+                        documents.add(document)
+                    }
                 }
             }
-        }catch(e: Exception){
+        } catch (e: Exception) {
             Log.e(e.message, e.stackTraceToString())
         }
-        return documents // 7
+        return documents
     }
 
-    override suspend fun save(document: Report) :Boolean {
+    override suspend fun save(document: Report): Boolean {
         return withContext(Dispatchers.IO) {
             var result = false
             try {
                 val db = databaseProvider.reportDatabase
                 db?.let { database ->
+                    val updateDoc = document.copy(updatedDate = System.currentTimeMillis())
                     val encoder = Json { encodeDefaults = true }
-                    val json = encoder.encodeToString(document)
+                    val json = encoder.encodeToString(updateDoc)
                     val doc = MutableDocument(document.reportId, json)
                     database.save(doc)
                     result = true
@@ -143,9 +146,10 @@ class ReportRepositoryDb (
             try {
                 val db = databaseProvider.reportDatabase
                 db?.let { database ->
-                    val query = database.createQuery("SELECT COUNT(*) AS count FROM _ as item WHERE documentType=\"report\"")
-                    val results = query.execute().allResults() // 5
-                    count = results[0].getInt("count") // 6
+                    val query =
+                        database.createQuery("SELECT COUNT(*) AS count FROM _ as item WHERE documentType=\"report\"")
+                    val results = query.execute().allResults()
+                    count = results[0].getInt("count")
                 }
             } catch (e: Exception) {
                 Log.e(e.message, e.stackTraceToString())

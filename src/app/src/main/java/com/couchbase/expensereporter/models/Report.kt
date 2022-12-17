@@ -24,16 +24,24 @@ class Report(
     var status: String = "Draft",
     val department: String = "",
     val createdBy: String = "",
+    val updatedDate: Long = 0,
     val approvalManager: Manager? = null,
 ) {
 
     fun getReportDateString():String {
-        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = reportDate
-        return formatter.format(calendar.time)
+        return getDateDisplayString(reportDate)
     }
 
+    fun getUpdatedDateString():String {
+        return getDateDisplayString(updatedDate)
+    }
+
+    private fun getDateDisplayString(date: Long):String {
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = date
+            return formatter.format(calendar.time)
+    }
 
     fun copy(
         reportId: String = this.reportId,
@@ -45,6 +53,7 @@ class Report(
         amount: Double = this.amount,
         status: String = this.status,
         department: String = this.department,
+        updatedDate: Long = this.updatedDate,
         createdBy: String = this.createdBy,
         approvalManager: Manager? = this.approvalManager
     ) = Report(
@@ -58,6 +67,7 @@ class Report(
         status,
         department,
         createdBy,
+        updatedDate,
         approvalManager
     )
 

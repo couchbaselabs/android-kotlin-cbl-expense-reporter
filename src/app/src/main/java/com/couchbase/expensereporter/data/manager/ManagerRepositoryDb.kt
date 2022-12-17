@@ -1,6 +1,5 @@
 package com.couchbase.expensereporter.data.manager
 
-import android.content.Context
 import android.util.Log
 import com.couchbase.lite.*
 import kotlinx.coroutines.Dispatchers
@@ -30,24 +29,24 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
                 db?.let { database ->
                     var queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$department || '%')")
 
-                    val parameters = Parameters()  // <2>
+                    val parameters = Parameters()
                     parameters.setValue("department", department.lowercase())
 
-                    title?.let { // <3>
-                        if (title.isNotBlank()) {
+                    title?.let { titleScope ->
+                        if (titleScope.isNotBlank()) {
                             queryString.append(" AND lower(title) LIKE ('%' || \$title || '%')")
-                            parameters.setValue("title", it.lowercase())
+                            parameters.setValue("title", titleScope.lowercase())
                         }
                     }
 
-                    val query = database.createQuery(queryString.toString()) // <4>
-                    query.parameters = parameters; // <5>
+                    val query = database.createQuery(queryString.toString())
+                    query.parameters = parameters
 
                     var results = query.execute()
                         .allResults()
 
-                   results
-                        .forEach { item ->  // <6>
+                    results
+                        .forEach { item ->
                             val json = item.toJSON()
                             val manager = Json.decodeFromString<ManagerDao>(json).item
                             items.add(manager)
@@ -91,8 +90,8 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
                 db?.let { database ->
                     val query =
                         database.createQuery("SELECT COUNT(*) AS count FROM _ AS item WHERE documentType=\"manager\"") // <1>
-                    val results = query.execute().allResults() // <2>
-                    count = results[0].getInt("count") // <3>
+                    val results = query.execute().allResults()
+                    count = results[0].getInt("count")
                 }
             } catch (e: Exception) {
                 Log.e(e.message, e.stackTraceToString())
