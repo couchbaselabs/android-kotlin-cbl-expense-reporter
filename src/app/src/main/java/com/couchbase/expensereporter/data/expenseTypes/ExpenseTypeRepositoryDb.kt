@@ -19,7 +19,7 @@ class ExpenseTypeRepositoryDb(
 
     override suspend fun get(): List<ExpenseTypes> {
         return withContext(Dispatchers.IO) {
-            var expenseResults = mutableListOf<ExpenseTypes>()
+            val expenseResults = mutableListOf<ExpenseTypes>()
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->

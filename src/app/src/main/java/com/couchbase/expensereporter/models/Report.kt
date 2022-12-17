@@ -9,10 +9,6 @@ import java.util.*
 
 @Keep
 @Serializable
-data class ReportDao(var item: Report)
-
-@Keep
-@Serializable
 class Report(
     val reportId: String = "",
     var name: String = "",

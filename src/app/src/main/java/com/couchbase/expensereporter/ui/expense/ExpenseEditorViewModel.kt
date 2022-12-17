@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.couchbase.expensereporter.data.expense.ExpenseRepository
 import com.couchbase.expensereporter.data.expenseTypes.ExpenseTypeRepository
 import com.couchbase.expensereporter.models.ExpenseType
-import com.couchbase.expensereporter.models.ExpenseTypes
 import com.couchbase.expensereporter.models.StandardExpense
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,9 +36,6 @@ class ExpenseEditorViewModel(
 
     val errorMessageState = mutableStateOf("")
 
-    init {
-    }
-
     var navigateUpCallback: () -> Unit = { }
 
     val onDateChanged: (Long?) -> Unit = { date ->
@@ -58,7 +53,7 @@ class ExpenseEditorViewModel(
     }
 
     val onAmountChanged: (String) -> Unit = { newValue ->
-        var amountChanged = newValue.toDoubleOrNull()
+        val amountChanged = newValue.toDoubleOrNull()
         amountChanged?.let { amount ->
             val r = expenseReportState.value?.copy(amount = amount)
             expenseReportState.value = r
@@ -118,10 +113,9 @@ class ExpenseEditorViewModel(
                 documentId = expenseReportIdState.value
             )
                 expenseReportState.value = expenseReport
-                expenseReport.date?.let { date ->
-                    val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
-                    dateState.value = formatter.format(date)
-                }
+                val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+                dateState.value = formatter.format(expenseReport.date)
+
                 if (expenseReport.description.isNotBlank()) {
                     descriptionState.value = expenseReport.description
                 }

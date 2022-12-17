@@ -18,13 +18,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.couchbase.expensereporter.ui.components.AddSubItemButton
 import com.couchbase.expensereporter.ui.components.AppBar
 import com.couchbase.expensereporter.ui.components.DatePicker
 import com.couchbase.expensereporter.ui.theme.ExpenseReporterTheme
 import com.couchbase.expensereporter.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
-import java.util.*
 
 @Composable
 fun ExpenseEditorView(
@@ -127,7 +125,7 @@ fun ExpenseEditor(
                             Red200
                         )
                 ) {
-                    parentExpenseTypes.forEachIndexed() { index, parentExpenseType ->
+                    parentExpenseTypes.forEachIndexed { index, parentExpenseType ->
                         DropdownMenuItem(onClick = {
                             onParentExpenseTypeChange(index)
                             expenseTypeParentExpanded = false
@@ -168,7 +166,7 @@ fun ExpenseEditor(
                             Red200
                         )
                 ) {
-                    childExpenseTypes.forEachIndexed() { index, childExpenseType ->
+                    childExpenseTypes.forEachIndexed { index, childExpenseType ->
                         DropdownMenuItem(onClick = {
                             onChildExpenseTypeChange(index)
                             expenseTypeChildExpanded = false

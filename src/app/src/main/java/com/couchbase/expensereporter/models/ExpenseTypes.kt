@@ -3,8 +3,6 @@ package com.couchbase.expensereporter.models
 import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 
-typealias ExpenseTypesCol = ArrayList<ExpenseTypes>
-
 @Keep
 @Serializable
 data class ExpenseTypeDao(

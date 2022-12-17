@@ -18,7 +18,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.dp
 
 import com.couchbase.expensereporter.ui.components.AppBar
 import com.couchbase.expensereporter.ui.components.ProfilePicture
-import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
 import com.couchbase.expensereporter.ui.theme.ExpenseReporterTheme
 import com.couchbase.expensereporter.ui.theme.Red500
 
@@ -113,7 +111,6 @@ fun UserProfileFormWidget(
     val firstNameResource = "givenName"
     val lastNameResource = "surname"
     val jobTitleResource = "jobTitle"
-    val departmentResource = "department"
     val saveResource = "save"
 
     //hide the keyboard when we are done editing

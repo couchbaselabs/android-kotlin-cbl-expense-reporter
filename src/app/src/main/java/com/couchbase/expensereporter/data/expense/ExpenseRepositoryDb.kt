@@ -22,7 +22,7 @@ class ExpenseRepositoryDb(
     private val databaseProvider: DatabaseProvider
 ) : ExpenseRepository {
 
-    override suspend fun getExpenses(reportId: String): Flow<List<StandardExpense>>? {
+    override suspend fun getExpenses(reportId: String): Flow<List<StandardExpense>> {
         return withContext(Dispatchers.IO) {
             try {
                 val db = databaseProvider.reportDatabase

@@ -1,7 +1,6 @@
 package com.couchbase.expensereporter
 
 import android.app.Application
-import android.content.Context
 
 import org.koin.android.BuildConfig
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +26,6 @@ import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.expensereporter.services.MockAuthenticationService
 import com.couchbase.expensereporter.ui.MainViewModel
 import com.couchbase.expensereporter.ui.developer.DevDatabaseInfoViewModel
-import com.couchbase.expensereporter.ui.developer.DeveloperInfoWidget
 import com.couchbase.expensereporter.ui.developer.DeveloperViewModel
 import com.couchbase.expensereporter.ui.expense.ExpenseEditorViewModel
 import com.couchbase.expensereporter.ui.expense.ExpenseListViewModel

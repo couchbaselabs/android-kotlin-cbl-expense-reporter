@@ -1,6 +1,5 @@
 package com.couchbase.expensereporter.data.replicator
 
-import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.lite.*
 import java.net.URI
@@ -9,7 +8,7 @@ class ReplicatorProvider(
     val authenticationService: AuthenticationService
 ) {
     var replicator: Replicator? = null
-    var replicatorConfiguration: ReplicatorConfiguration? = null
+    private var replicatorConfiguration: ReplicatorConfiguration? = null
 
     fun setupReplicator(database: Database) {
         //if replicator is already setup stop it before continuing

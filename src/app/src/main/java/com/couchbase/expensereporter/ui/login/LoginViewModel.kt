@@ -1,15 +1,11 @@
 package com.couchbase.expensereporter.ui.login
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.couchbase.expensereporter.data.DatabaseProvider
-import com.couchbase.expensereporter.data.replicator.ReplicatorProvider
 import com.couchbase.expensereporter.services.AuthenticationService
-import com.couchbase.lite.ReplicatorActivityLevel
-import com.couchbase.lite.ReplicatorStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

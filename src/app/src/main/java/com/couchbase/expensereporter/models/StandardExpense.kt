@@ -55,7 +55,7 @@ class StandardExpense(
         amount)
 
     fun expenseToString() : String {
-        var formatter = DecimalFormat("#,###.##")
+        val formatter = DecimalFormat("#,###.##")
         return formatter.format(amount)
     }
 

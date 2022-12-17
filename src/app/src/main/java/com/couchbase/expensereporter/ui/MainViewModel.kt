@@ -21,9 +21,7 @@ class MainViewModel(
     val startDatabase: () -> Unit = {
         viewModelScope.launch(Dispatchers.IO) {
             databaseProvider.initializeDatabases(authService.getCurrentUser())
-
-            //uncomment out to start replicator
-            //replicatorProvider.replicator.start()
+            replicatorProvider.replicator?.start()
 
         }
     }
@@ -31,8 +29,7 @@ class MainViewModel(
     val closeDatabase: () -> Unit = {
         viewModelScope.launch(Dispatchers.IO) {
             databaseProvider.closeDatabases()
-            //uncomment out to stop replicator
-            //replicatorProvider.replicator.stop()
+            replicatorProvider.replicator?.stop()
         }
     }
 }

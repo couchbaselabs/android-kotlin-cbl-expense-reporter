@@ -23,11 +23,11 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
 
     override suspend fun getByDepartmentTitle(department: String, title: String?): List<Manager> {
         return withContext(Dispatchers.IO) {
-            var items = mutableListOf<Manager>()
+            val items = mutableListOf<Manager>()
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->
-                    var queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$department || '%')")
+                    val queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$department || '%')")
 
                     val parameters = Parameters()
                     parameters.setValue("department", department.lowercase())
@@ -42,7 +42,7 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
                     val query = database.createQuery(queryString.toString())
                     query.parameters = parameters
 
-                    var results = query.execute()
+                    val results = query.execute()
                         .allResults()
 
                     results
@@ -61,7 +61,7 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
 
     override suspend fun get(): List<Manager> {
         return withContext(Dispatchers.IO) {
-            var items = mutableListOf<Manager>()
+            val items = mutableListOf<Manager>()
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->

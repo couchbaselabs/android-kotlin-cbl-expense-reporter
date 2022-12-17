@@ -1,6 +1,5 @@
 package com.couchbase.expensereporter.ui.expense
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

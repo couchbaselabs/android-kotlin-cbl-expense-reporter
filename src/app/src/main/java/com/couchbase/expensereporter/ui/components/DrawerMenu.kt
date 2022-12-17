@@ -137,7 +137,7 @@ fun Drawer(
 @Composable
 fun DrawerPreview() {
     val onClicked: (String) -> Unit = { _ -> }
-    ExpenseReporterTheme() {
+    ExpenseReporterTheme {
         Drawer(
             modifier = Modifier.padding(),
             firstName =  "Jane",

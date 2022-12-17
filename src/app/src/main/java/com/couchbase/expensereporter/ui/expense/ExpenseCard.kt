@@ -170,7 +170,9 @@ fun ExpenseCardPreview() {
         {
             Surface(
                 color = MaterialTheme.colors.background,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             )
             {
                 ExpenseCard(

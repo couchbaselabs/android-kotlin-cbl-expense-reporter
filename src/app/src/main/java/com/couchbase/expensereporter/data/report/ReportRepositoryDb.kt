@@ -6,7 +6,6 @@ import com.couchbase.expensereporter.models.Manager
 import com.couchbase.expensereporter.models.Report
 import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.lite.*
-import com.couchbase.lite.Function
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -195,7 +194,7 @@ class ReportRepositoryDb(
             try {
                 val db = databaseProvider.reportDatabase
                 val document = get(documentId)
-                var updateDoc = document.copy(approvalManager = manager)
+                val updateDoc = document.copy(approvalManager = manager)
                 db?.let { database ->
                     val json = Json.encodeToString(updateDoc)
                     val doc = MutableDocument(updateDoc.reportId, json)

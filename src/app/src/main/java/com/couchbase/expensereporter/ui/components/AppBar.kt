@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.couchbase.expensereporter.ui.theme.ExpenseReporterTheme
 
 //used to render the main application bar in the app and show the overflow icon for drawer
-
 @Composable
 fun AppBar(title: String = "",
            navigationIcon: ImageVector,

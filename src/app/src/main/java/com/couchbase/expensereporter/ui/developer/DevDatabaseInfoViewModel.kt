@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.couchbase.expensereporter.data.KeyValueRepository
 import com.couchbase.expensereporter.data.expense.ExpenseRepository
-import com.couchbase.expensereporter.data.expense.ExpenseRepositoryDb
 import com.couchbase.expensereporter.data.expenseTypes.ExpenseTypeRepository
 import com.couchbase.expensereporter.data.manager.ManagerRepository
 import com.couchbase.expensereporter.data.report.ReportRepository

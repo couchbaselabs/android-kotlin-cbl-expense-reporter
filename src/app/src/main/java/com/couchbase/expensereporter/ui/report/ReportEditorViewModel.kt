@@ -26,10 +26,10 @@ class ReportEditorViewModel(private val repository: ReportRepository)
             val report = repository.get(it)
             withContext(Dispatchers.Main) {
                 reportState.value = report
-                report.reportDate?.let { date ->
-                    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-                    reportDateState.value = formatter.format(date)
-                }
+
+                val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+                reportDateState.value = formatter.format(report.reportDate)
+
                 if (report.approvalManager != null){
                     report.approvalManager?.let{
                         approvalManagerSelectedState.value = "${it.givenName} ${it.surname}"

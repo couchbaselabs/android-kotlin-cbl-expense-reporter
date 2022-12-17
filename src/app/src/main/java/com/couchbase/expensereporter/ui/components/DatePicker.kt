@@ -1,6 +1,5 @@
 package com.couchbase.expensereporter.ui.components
 
-import android.R
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
@@ -33,7 +32,7 @@ fun showDatePickerDialog(activity: Context,
 
     val datePickerDialog = DatePickerDialog(
         activity,
-        R.style.Theme_Material_Dialog,
+        android.R.style.Theme_Material_Dialog,
         { _: DatePicker, theYear: Int, theMonth: Int, dayOfMonth: Int ->
             val cal = Calendar.getInstance()
             cal.set(theYear, theMonth, dayOfMonth)

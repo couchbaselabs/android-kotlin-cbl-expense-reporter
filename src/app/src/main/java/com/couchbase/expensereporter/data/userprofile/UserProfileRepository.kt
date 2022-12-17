@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserProfileRepository(
-    var databaseProvider: DatabaseProvider) : KeyValueRepository {
+    private var databaseProvider: DatabaseProvider) : KeyValueRepository {
 
     override fun reportDatabaseName(): String {
         return databaseProvider.currentReportDatabaseName
