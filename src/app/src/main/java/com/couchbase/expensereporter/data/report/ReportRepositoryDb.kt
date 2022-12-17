@@ -63,7 +63,7 @@ class ReportRepositoryDb (
                 val db = databaseProvider.reportDatabase
 
                 db?.let { database ->
-                    val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.status, item.department, item.createdBy, item.approvalManager, SUM(e.amount) as amount FROM _ AS item JOIN _ AS e ON item.reportId = e.reportId WHERE item.documentType=\"report\" AND e.documentType=\"expense\" GROUP BY e.reportId")
+                    val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.status, item.department, item.createdBy, item.approvalManager, SUM(e.amount) as amount FROM _ AS item JOIN _ AS e ON item.reportId = e.reportId WHERE item.documentType=\"report\" AND e.documentType=\"expense\"")
 
                     // create a flow to return the results dynamically as needed - more information on
                     // CoRoutine Flows can be found at
