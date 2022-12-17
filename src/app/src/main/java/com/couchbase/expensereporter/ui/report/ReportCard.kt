@@ -26,6 +26,7 @@ fun ReportCard(report: Report,
                onSelected: (String) -> Unit,
                onEditChange: (String) -> Unit,
                onDeleteChange: (String) -> Boolean,
+               onStatusChange: (Report) -> Unit,
                snackBarCoroutineScope: CoroutineScope,
                scaffoldState: ScaffoldState
 ){
@@ -43,7 +44,7 @@ fun ReportCard(report: Report,
     ) {
         Column(
             modifier = Modifier
-                .height(200.dp)
+                .height(180.dp)
                 .padding(16.dp)
         ) {
             Row(
@@ -88,8 +89,42 @@ fun ReportCard(report: Report,
                         }) {
                             Text("Delete")
                         }
+                        if (report.status == "Draft") {
+                            DropdownMenuItem(onClick = {
+                                //do change status
+                                val r = report.copy(status = "In Review")
+                                onStatusChange(r)
+
+                                expanded = false
+                            }) {
+                                Text("Send for Review")
+                            }
+                        } else if (report.status == "In Review"){
+                            DropdownMenuItem(onClick = {
+                                //do change status
+                                val r = report.copy(status = "Draft")
+                                onStatusChange(r)
+
+                                expanded = false
+                            }) {
+                                Text("Revert to Draft")
+                            }
+                        }
                     }
                 }
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
+                Icon(
+                    Icons.Default.Report,
+                    contentDescription = "status",
+                    modifier = Modifier.size(14.dp),
+                    tint = MaterialTheme.colors.onSurface)
+                Text(modifier = Modifier.padding(start = 6.dp),
+                    text = report.status,
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onSurface
+                )
             }
             Row(modifier = Modifier
                 .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
@@ -148,6 +183,7 @@ fun ReportCardPreview() {
     val onSelected: (String) -> Unit = { _ : String -> }
     val onEditChange: (String) -> Unit = { _ : String -> }
     val onDeleteChange: (String) -> Boolean  = { _: String -> false }
+    val onStatusChange: (Report) -> Unit = { }
     val scaffoldState:ScaffoldState = rememberScaffoldState()
     val coRouteScope = rememberCoroutineScope()
 
@@ -172,6 +208,7 @@ fun ReportCardPreview() {
                     onSelected = onSelected,
                     onEditChange = onEditChange,
                     onDeleteChange = onDeleteChange,
+                    onStatusChange = onStatusChange,
                     snackBarCoroutineScope = coRouteScope,
                     scaffoldState = scaffoldState
                 )

@@ -42,7 +42,7 @@ fun ExpenseCard(
     ){
         Column(
             modifier = Modifier
-                .height(200.dp)
+                .height(160.dp)
                 .padding(16.dp)
         ) {
             Row(

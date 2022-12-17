@@ -52,8 +52,8 @@ fun ReportListView(
                     }
                 }
 
-                viewModel.reportFlow?.let {
-                    val documents by it.collectAsState(initial = listOf())
+                viewModel.reportFlow?.let { reports ->
+                    val documents by reports.collectAsState(initial = listOf())
 
                     ReportList(
                         items = documents,
@@ -61,6 +61,7 @@ fun ReportListView(
                         onSelected = navigateToExpenseListByReport,
                         onEditChange = navigateToReportEditor,
                         onDeleteChange = viewModel.delete,
+                        onStatusChange = viewModel.statusChange,
                         scaffoldState = scaffoldState,
                         scope = scope
                     )
@@ -77,6 +78,7 @@ fun ReportList(
     onSelected: (String) -> Unit,
     onEditChange: (String) -> Unit,
     onDeleteChange: (String) -> Boolean,
+    onStatusChange: (Report) -> Unit,
     scaffoldState: ScaffoldState,
     scope: CoroutineScope,
 ) {
@@ -102,10 +104,11 @@ fun ReportList(
                         onSelected = onSelected,
                         onEditChange = onEditChange,
                         onDeleteChange = onDeleteChange,
+                        onStatusChange = onStatusChange,
                         snackBarCoroutineScope = scope,
                         scaffoldState = scaffoldState
                     )
-                    Spacer(modifier = Modifier.padding(top = 30.dp))
+                    Spacer(modifier = Modifier.padding(top = 22.dp))
                 }
             }
         }
@@ -129,6 +132,7 @@ fun ReportListPreview() {
     val onSelected: (String) -> Unit = { _ : String -> }
     val onEditChange: (String) -> Unit = { _ : String -> }
     val onDeleteChange: (String) -> Boolean  = { _: String -> false }
+    val onStatusChange: (Report) -> Unit = { }
     val scaffoldState:ScaffoldState = rememberScaffoldState()
     val coRouteScope = rememberCoroutineScope()
 
@@ -138,6 +142,7 @@ fun ReportListPreview() {
         onSelected = onSelected,
         onEditChange = onEditChange,
         onDeleteChange = onDeleteChange,
+        onStatusChange = onStatusChange,
         scaffoldState = scaffoldState,
         scope = coRouteScope)
 

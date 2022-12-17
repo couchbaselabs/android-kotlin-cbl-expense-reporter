@@ -23,6 +23,12 @@ class ReportListViewModel(private val repository: ReportRepository)
         }
     }
 
+    val statusChange: (Report) -> Unit = { report ->
+        viewModelScope.launch(Dispatchers.IO){
+            repository.save(report)
+        }
+    }
+
     val delete: (String) -> Boolean = { documentId: String ->
         var didDelete = false
         viewModelScope.launch(Dispatchers.IO){

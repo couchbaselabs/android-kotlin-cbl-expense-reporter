@@ -107,7 +107,7 @@ fun ExpenseList(
                         scope = scope,
                         scaffoldState = scaffoldState
                     )
-                    Spacer(modifier = Modifier.padding(top = 30.dp))
+                    Spacer(modifier = Modifier.padding(top = 16.dp))
                 }
             }
         }
