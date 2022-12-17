@@ -19,6 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.couchbase.expensereporter.MainDestinations
 import com.couchbase.expensereporter.NavigationGraph
+import com.couchbase.expensereporter.data.replicator.ReplicatorProvider
 import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.expensereporter.ui.components.Drawer
 import com.couchbase.expensereporter.ui.profile.UserProfileViewModel
@@ -41,11 +42,17 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val authService: AuthenticationService by inject()
+                val replicatorProvider: ReplicatorProvider by inject()
                 val menuResource = "btnMenu"
 
                 fun logout() {
                     //todo handle turning off replication
                     authService.logout()
+                    replicatorProvider.replicator?.let { replicator ->
+                        replicator.stop()
+                        replicator.close()
+                    }
+
                 }
 
                 //we need a drawer overflow menu on multiple screens

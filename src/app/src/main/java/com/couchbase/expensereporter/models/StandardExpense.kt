@@ -21,6 +21,7 @@ class StandardExpense(
     val expenseTypeCategory: String = "",
     val expenseType: String = "",
     val documentType:String = "",
+    val createdBy:String = "",
     val amount: Double = 0.00) {
 
     @kotlinx.serialization.Transient
@@ -40,6 +41,7 @@ class StandardExpense(
         expenseType: String = this.expenseType,
         expenseTypeCategory: String = this.expenseTypeCategory,
         documentType: String = this.documentType,
+        createdBy: String = this.createdBy,
         amount: Double = this.amount
     ) = StandardExpense(
         expenseId,
@@ -49,6 +51,7 @@ class StandardExpense(
         expenseTypeCategory,
         expenseType,
         documentType,
+        createdBy,
         amount)
 
     fun expenseToString() : String {

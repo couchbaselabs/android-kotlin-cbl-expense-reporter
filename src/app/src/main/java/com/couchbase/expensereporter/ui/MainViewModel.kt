@@ -8,24 +8,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 import com.couchbase.expensereporter.data.DatabaseProvider
+import com.couchbase.expensereporter.data.replicator.ReplicatorProvider
 import com.couchbase.expensereporter.services.AuthenticationService
 
 
 class MainViewModel(
     private val authService: AuthenticationService,
-    private val databaseProvider: DatabaseProvider)
+    private val databaseProvider: DatabaseProvider,
+    private val replicatorProvider: ReplicatorProvider)
     :ViewModel() {
 
     val startDatabase: () -> Unit = {
         viewModelScope.launch(Dispatchers.IO) {
             databaseProvider.initializeDatabases(authService.getCurrentUser())
+
+            //uncomment out to start replicator
+            //replicatorProvider.replicator.start()
+
         }
     }
 
     val closeDatabase: () -> Unit = {
         viewModelScope.launch(Dispatchers.IO) {
-            //replicatorService.stopReplication()
             databaseProvider.closeDatabases()
+            //uncomment out to stop replicator
+            //replicatorProvider.replicator.stop()
         }
     }
 }

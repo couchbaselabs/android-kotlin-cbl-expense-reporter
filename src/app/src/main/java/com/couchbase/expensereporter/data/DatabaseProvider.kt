@@ -1,6 +1,7 @@
 package com.couchbase.expensereporter.data
 
 import android.content.Context
+import com.couchbase.expensereporter.data.replicator.ReplicatorProvider
 import com.couchbase.expensereporter.models.User
 import com.couchbase.lite.*
 import java.io.File
@@ -8,7 +9,9 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-class DatabaseProvider (private val context: Context) {
+class DatabaseProvider(
+    private val context: Context,
+    private val replicatorProvider: ReplicatorProvider) {
 
     var reportDatabase: Database? = null
     var startingDatabase: Database? = null
@@ -59,17 +62,30 @@ class DatabaseProvider (private val context: Context) {
             // create or open a database for user to create expense reports
             // calculate database name based on current logged in users username
             val username = currentUser.username
-            currentReportDatabaseName = username.replace('@', '_').plus("_").plus(defaultReportDatabaseName)
+            currentReportDatabaseName =
+                username.replace('@', '_').plus("_").plus(defaultReportDatabaseName)
             reportDatabase = Database(currentReportDatabaseName, dbConfig)
 
             //setup the warehouse Database
             setupStartingDatabase(dbConfig)
 
             //create indexes for database queries
-            createTypeIndex(reportDatabase)
-            createTypeIndex(startingDatabase)
+            createDocumentTypeIndex(reportDatabase)
+            createDocumentTypeIndex(startingDatabase)
 
-            //todo create indexes
+            createReportIdIndex(reportDatabase)
+            createDocumentTypeReportIdIndex(reportDatabase)
+
+            //setup replicator
+            reportDatabase?.let { db ->
+                replicatorProvider.setupReplicator(db)
+                replicatorProvider.replicator?.let { replicator ->
+                    if (replicator.status.activityLevel == ReplicatorActivityLevel.STOPPED || replicator.status.activityLevel == ReplicatorActivityLevel.OFFLINE) {
+                        replicator.start()
+                    }
+                }
+            }
+
 
         } catch (e: Exception) {
             android.util.Log.e(e.message, e.stackTraceToString())
@@ -104,15 +120,43 @@ class DatabaseProvider (private val context: Context) {
     }
 
     // create index for document type if it doesn't exist
-    private fun createTypeIndex(
-        database: Database?) {
+    private fun createDocumentTypeIndex(
+        database: Database?
+    ) {
         database?.let {
             if (!it.indexes.contains("idx_document_type")) {
                 it.createIndex(
                     "idx_document_type", IndexBuilder.valueIndex(
-                        ValueIndexItem.expression(
-                            Expression.property("documentType")
-                        )
+                        ValueIndexItem.property("documentType")
+                    )
+                )
+            }
+        }
+    }
+
+    private fun createReportIdIndex(
+        database: Database?
+    ) {
+        database?.let {
+            if (!it.indexes.contains("idx_reportId")) {
+                it.createIndex(
+                    "idx_reportId", IndexBuilder.valueIndex(
+                        ValueIndexItem.property("reportId")
+                    )
+                )
+            }
+        }
+    }
+
+    private fun createDocumentTypeReportIdIndex(
+        database: Database?
+    ) {
+        database?.let {
+            if (!it.indexes.contains("idx_document_type_reportId")) {
+                it.createIndex(
+                    "idx_document_type_reportId", IndexBuilder.valueIndex(
+                        ValueIndexItem.property("documentType"),
+                        ValueIndexItem.property("reportId")
                     )
                 )
             }
@@ -121,7 +165,8 @@ class DatabaseProvider (private val context: Context) {
 
     private fun unzip(
         file: String,
-        destination: File) {
+        destination: File
+    ) {
         context.assets.open(file).use { stream ->
             val buffer = ByteArray(1024)
             val zis = ZipInputStream(stream)

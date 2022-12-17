@@ -37,6 +37,7 @@ import com.couchbase.expensereporter.ui.report.ManagerSelectionViewModel
 import com.couchbase.expensereporter.ui.report.ReportEditorViewModel
 import com.couchbase.expensereporter.ui.report.ReportListViewModel
 import com.couchbase.expensereporter.data.DatabaseProvider
+import com.couchbase.expensereporter.data.replicator.ReplicatorProvider
 import org.koin.core.context.GlobalContext.startKoin
 
 class ExpenseReporterApplication
@@ -65,12 +66,14 @@ class ExpenseReporterApplication
                 // ** result in the application not functioning correctly
                 singleOf(::DatabaseProvider)
 
-                singleOf(::MockAuthenticationService) bind  AuthenticationService::class
+                singleOf(::MockAuthenticationService) bind AuthenticationService::class
                 singleOf(::UserProfileRepository) bind KeyValueRepository::class
                 singleOf(::ReportRepositoryDb) bind ReportRepository::class
                 singleOf(::ManagerRepositoryDb) bind ManagerRepository::class
                 singleOf(::ExpenseRepositoryDb) bind ExpenseRepository::class
-                singleOf(::ExpenseTypeRepositoryDb) bind ExpenseTypeRepository:: class
+                singleOf(::ExpenseTypeRepositoryDb) bind ExpenseTypeRepository::class
+
+                singleOf(::ReplicatorProvider)
 
                 viewModelOf(::LoginViewModel)
                 viewModelOf(::MainViewModel)

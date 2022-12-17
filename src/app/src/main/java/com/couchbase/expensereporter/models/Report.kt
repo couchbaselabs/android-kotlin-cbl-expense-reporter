@@ -40,7 +40,7 @@ class Report(
         val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = date
-            return formatter.format(calendar.time)
+        return formatter.format(calendar.time)
     }
 
     fun copy(

@@ -4,6 +4,7 @@ import android.util.Log
 import com.couchbase.expensereporter.data.DatabaseProvider
 import com.couchbase.expensereporter.models.StandardExpense
 import com.couchbase.expensereporter.models.StandardExpenseDao
+import com.couchbase.expensereporter.services.AuthenticationService
 import com.couchbase.lite.*
 import com.couchbase.lite.Function
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ExpenseRepositoryDb(
+    private val authenticationService: AuthenticationService,
     private val databaseProvider: DatabaseProvider
 ) : ExpenseRepository {
 
@@ -87,10 +89,12 @@ class ExpenseRepositoryDb(
                 Log.e(e.message, e.stackTraceToString())
             }
 
+            val user = authenticationService.getCurrentUser()
             return@withContext StandardExpense(
                 expenseId = documentId,
                 reportId = reportId,
                 date = System.currentTimeMillis(),
+                createdBy = user.username,
                 documentType = "expense",
             )
         }
