@@ -127,7 +127,7 @@ class ExpenseEditorViewModel(
                     descriptionState.value = expenseReport.description
                 }
                 amountState.value = expenseReport.amount
-                
+
                 if (expenseReport.expenseTypeCategory.isNotBlank()) {
                     selectedParentIndexState.value =
                         parentExpensesTypeState.indexOf(expenseReport.expenseTypeCategory)

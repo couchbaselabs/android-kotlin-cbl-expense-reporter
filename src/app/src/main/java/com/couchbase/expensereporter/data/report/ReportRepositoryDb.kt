@@ -61,18 +61,9 @@ class ReportRepositoryDb (
         return withContext(Dispatchers.IO) {
             try {
                 val db = databaseProvider.reportDatabase
-                // NOTE - the as method is a also a keyword in Kotlin, so it must be escaped using
-                // `as` - this will probably break auto complete suggestion, so it will act like the where
-                // method isn't available  work around is to do your entire statement without the as
-                // function call and add that in last
+
                 db?.let { database ->
-                    val query = QueryBuilder        // <1>
-                        .select(SelectResult.all()) // <2>
-                        .from(DataSource.database(database).`as`("item")) // <3>
-                        .where( //4
-                            Expression.property("documentType")
-                                .equalTo(Expression.string("report")) // <4>
-                        ) // <4>
+                    val query = database.createQuery("SELECT item.reportId, item.name, item.description, item.isComplete, item.documentType, item.reportDate, item.status, item.department, item.createdBy, item.approvalManager, SUM(e.amount) as amount FROM _ AS item JOIN _ AS e ON item.reportId = e.reportId WHERE item.documentType=\"report\" AND e.documentType=\"expense\" GROUP BY e.reportId")
 
                     // create a flow to return the results dynamically as needed - more information on
                     // CoRoutine Flows can be found at
@@ -98,7 +89,7 @@ class ReportRepositoryDb (
                 results.forEach { result ->      // 3
                     val json = result.toJSON()     // 4
                     val document =
-                        Json.decodeFromString<ReportDao>(json).item   // 5
+                        Json.decodeFromString<Report>(json)   // 5
                     documents.add(document) // 6
                 }
             }
@@ -152,13 +143,7 @@ class ReportRepositoryDb (
             try {
                 val db = databaseProvider.reportDatabase
                 db?.let { database ->
-                    val query = QueryBuilder  // 1
-                        .select(
-                            SelectResult.expression(com.couchbase.lite.Function.count(Expression.string("*")))
-                                .`as`("count") ) // 2
-                        .from(DataSource.database(database)) //3
-                        .where(
-                            Expression.property("documentType").equalTo(Expression.string("report")) ) // 4
+                    val query = database.createQuery("SELECT COUNT(*) AS count FROM _ as item WHERE documentType=\"report\"")
                     val results = query.execute().allResults() // 5
                     count = results[0].getInt("count") // 6
                 }
