@@ -38,8 +38,7 @@ fun ReportCard(report: Report,
             .fillMaxWidth(),
         elevation = 8.dp,
         onClick = {
-            val json = Base64.getEncoder().encodeToString(report.toJson().toByteArray())
-            onSelected(json)
+            onSelected(report.reportId)
         }
     ) {
         Column(
@@ -163,7 +162,9 @@ fun ReportCardPreview() {
         {
             Surface(
                 color = MaterialTheme.colors.background,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             )
             {
                 ReportCard(

@@ -18,8 +18,9 @@ class StandardExpense(
     val reportId: String = "",
     val description: String = "",
     val date: Long = 0,
+    val expenseTypeCategory: String = "",
     val expenseType: String = "",
-    val documentType:String = "expense",
+    val documentType:String = "",
     val amount: Double = 0.00) {
 
     @kotlinx.serialization.Transient
@@ -37,6 +38,7 @@ class StandardExpense(
         description: String = this.description,
         date: Long = this.date,
         expenseType: String = this.expenseType,
+        expenseTypeCategory: String = this.expenseTypeCategory,
         documentType: String = this.documentType,
         amount: Double = this.amount
     ) = StandardExpense(
@@ -44,6 +46,7 @@ class StandardExpense(
         reportId,
         description,
         date,
+        expenseTypeCategory,
         expenseType,
         documentType,
         amount)

@@ -42,7 +42,9 @@ fun ExpenseListView(
         {
             Surface(
                 color = MaterialTheme.colors.background,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             )
             {
                 // collecting the flow and turning it into state
@@ -55,8 +57,8 @@ fun ExpenseListView(
                         HorizontalDottedProgressBar(modifier = Modifier.padding())
                     }
                 }
-                viewModel.expenseFlow?.let {
-                    val documents by it.collectAsState(initial = listOf())
+                viewModel.expenseFlow?.let { docs ->
+                    val documents by docs.collectAsState(initial = listOf())
 
                     ExpenseList(
                         items = documents,

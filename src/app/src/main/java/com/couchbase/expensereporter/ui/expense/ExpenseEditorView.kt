@@ -86,7 +86,7 @@ fun ExpenseEditor(
     onDateChanged: (Long?) -> Unit,
     amount: Double,
     onAmountChanged: (String) -> Unit,
-    onSave: (navigateUp: Boolean) -> Unit,
+    onSave: () -> Unit,
     errorMessage: String
 ){
     var expenseTypeParentExpanded by remember { mutableStateOf(false)}
@@ -230,7 +230,7 @@ fun ExpenseEditor(
                     .padding(top = 24.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Red500),
                     onClick = {
-                        onSave(true)
+                        onSave()
                     })
                 {
                     Text("Save",
@@ -267,7 +267,7 @@ fun ExpenseEditorPreview() {
     val onDateChanged: (Long?) -> Unit = {}
     val amount = 0.00
     val onAmountChanged: (String) -> Unit = {}
-    val onSave: (navigateUp: Boolean) -> Unit = {}
+    val onSave: () -> Unit = {}
     val errorMessage = ""
 
     ExpenseReporterTheme {

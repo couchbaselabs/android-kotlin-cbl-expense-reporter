@@ -23,7 +23,7 @@ class ExpenseEditorViewModel(
     : ViewModel() {
 
     private var expenseReportState = mutableStateOf<StandardExpense?>(null)
-    private var expenseReportIdState = mutableStateOf("")
+    var expenseReportIdState = mutableStateOf("")
     var reportIdState = mutableStateOf("")
     var descriptionState = mutableStateOf("")
     var amountState = mutableStateOf(0.00)
@@ -57,16 +57,6 @@ class ExpenseEditorViewModel(
 
     var navigateUpCallback: () -> Unit = { }
 
-    val expenseId: (String) -> Unit = {
-        viewModelScope.launch(Dispatchers.IO){
-            val expense = expenseRepository.get(expenseReportIdState.value, it)
-            withContext(Dispatchers.Main){
-                expenseReportState.value = expense
-                
-            }
-        }
-    }
-
     val onDateChanged: (Long?) -> Unit = { date ->
         date?.let { theDate ->
             dateState.value = dateFormatter(theDate)
@@ -95,6 +85,10 @@ class ExpenseEditorViewModel(
         if (newValue <= parentExpensesTypeState.size) {
             selectedParentIndexState.value = newValue
 
+            //update expense type category
+            val r = expenseReportState.value?.copy(expenseTypeCategory = parentExpensesTypeState[newValue])
+            expenseReportState.value = r
+
             //load child expenses
             childExpensesTypeState = expenseTypes[newValue].subTypes.toMutableStateList()
             selectedChildIndexState.value = 0
@@ -104,11 +98,14 @@ class ExpenseEditorViewModel(
     val onChildExpenseTypeChange: (Int) -> Unit = { newValue ->
         if (newValue <= childExpensesTypeState.size) {
             selectedChildIndexState.value = newValue
+            //update expense type
+            val r = expenseReportState.value?.copy(expenseType = childExpensesTypeState[newValue])
+            expenseReportState.value = r
         }
     }
 
     private fun dateFormatter(milliseconds: Long): String {
-        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = milliseconds
         return formatter.format(calendar.time)
@@ -126,16 +123,46 @@ class ExpenseEditorViewModel(
                     val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
                     dateState.value = formatter.format(date)
                 }
-                if(expenseReport.description.isNotBlank()) {
+                if (expenseReport.description.isNotBlank()) {
                     descriptionState.value = expenseReport.description
+                }
+                amountState.value = expenseReport.amount
+                
+                if (expenseReport.expenseTypeCategory.isNotBlank()) {
+                    selectedParentIndexState.value =
+                        parentExpensesTypeState.indexOf(expenseReport.expenseTypeCategory)
+                    //load child expenses
+                    childExpensesTypeState =
+                        expenseTypes[selectedParentIndexState.value].subTypes.toMutableStateList()
+                    selectedChildIndexState.value =
+                        childExpensesTypeState.indexOf(expenseReport.expenseType)
+                } else {
+                    //default expense type to first item in both lists
+                    val r = expenseReportState.value?.copy(
+                        expenseTypeCategory = parentExpensesTypeState[0],
+                        expenseType = childExpensesTypeState[0]
+                    )
+                    expenseReportState.value = r
                 }
             }
         }
     }
 
-    val onSave: (navigateUp: Boolean) -> Unit = { navigateUp ->
+    val onSave: () -> Unit = {
         viewModelScope.launch(Dispatchers.IO) {
-
+            expenseReportState.value?.let { standardExpense ->
+                if (standardExpense.expenseType.isNotBlank())
+                {
+                    errorMessageState.value = ""
+                    expenseRepository.save(standardExpense)
+                    withContext(Dispatchers.Main) {
+                        navigateUpCallback()
+                    }
+                }
+                else {
+                    errorMessageState.value = "Error - no expense type selected, can't save without setting"
+                }
+            }
         }
     }
 }

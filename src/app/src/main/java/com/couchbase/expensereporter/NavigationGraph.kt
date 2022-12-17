@@ -138,7 +138,9 @@ fun NavigationGraph (
                         withContext(Dispatchers.IO) {
                             //update this code later
                             viewModel.reportIdState.value = reportId
-                            viewModel.expenseId(expenseId)
+                            viewModel.expenseReportIdState.value = expenseId
+                            viewModel.navigateUpCallback = actions.upPress
+                            viewModel.loadExpense()
                         }
                     }
                     //update to call the editor

@@ -94,6 +94,7 @@ class ExpenseRepositoryDb(
             return@withContext StandardExpense(
                 expenseId = documentId,
                 reportId = reportId,
+                date = System.currentTimeMillis(),
                 documentType = "expense",
             )
         }
@@ -104,8 +105,9 @@ class ExpenseRepositoryDb(
             try {
                 val db = databaseProvider.reportDatabase
                 db?.let { database ->
+
                     val json = Json.encodeToString(document)
-                    val doc = MutableDocument(document.reportId, json)
+                    val doc = MutableDocument(document.expenseId, json)
                     database.save(doc)
                 }
             } catch (e: Exception) {
