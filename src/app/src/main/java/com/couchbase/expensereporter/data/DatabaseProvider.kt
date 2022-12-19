@@ -81,7 +81,7 @@ class DatabaseProvider(
                 replicatorProvider.setupReplicator(db)
                 replicatorProvider.replicator?.let { replicator ->
                     if (replicator.status.activityLevel == ReplicatorActivityLevel.STOPPED || replicator.status.activityLevel == ReplicatorActivityLevel.OFFLINE) {
-                        replicator.start()
+                        //replicator.start()
                     }
                 }
             }

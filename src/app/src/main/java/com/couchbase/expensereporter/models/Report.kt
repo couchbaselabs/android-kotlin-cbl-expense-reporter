@@ -14,7 +14,7 @@ class Report(
     var name: String = "",
     val description: String = "",
     val isComplete: Boolean = false,
-    var documentType: String = "report",
+    var documentType: String = "",
     val reportDate: Long = 0,
     val amount: Double = 0.00,
     var status: String = "Draft",
