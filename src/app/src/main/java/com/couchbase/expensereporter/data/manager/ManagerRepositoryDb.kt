@@ -27,17 +27,18 @@ class ManagerRepositoryDb(private val databaseProvider: DatabaseProvider)
             try {
                 val db = databaseProvider.startingDatabase
                 db?.let { database ->
-                    val queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$department || '%')")
+                    val queryString = StringBuilder("SELECT * FROM _ AS item WHERE documentType=\"manager\" AND lower(department) LIKE ('%' || \$parameterDepartment || '%')")
 
                     val parameters = Parameters()
-                    parameters.setValue("department", department.lowercase())
+                    parameters.setValue("parameterDepartment", department.lowercase())
 
                     title?.let { titleScope ->
-                        if (titleScope.isNotBlank()) {
-                            queryString.append(" AND lower(title) LIKE ('%' || \$title || '%')")
-                            parameters.setValue("title", titleScope.lowercase())
+                        if (titleScope.isNotEmpty()) {
+                            queryString.append(" AND lower(jobTitle) LIKE ('%' || \$parameterJobTitle || '%')")
+                            parameters.setValue("parameterJobTitle", titleScope.lowercase())
                         }
                     }
+                    queryString.append(" ORDER BY surname, givenName")
 
                     val query = database.createQuery(queryString.toString())
                     query.parameters = parameters

@@ -44,15 +44,15 @@ class StandardExpense(
         createdBy: String = this.createdBy,
         amount: Double = this.amount
     ) = StandardExpense(
-        expenseId,
-        reportId,
-        description,
-        date,
-        expenseTypeCategory,
-        expenseType,
-        documentType,
-        createdBy,
-        amount)
+        expenseId = expenseId,
+        reportId = reportId,
+        description = description,
+        date = date,
+        expenseTypeCategory = expenseTypeCategory,
+        expenseType = expenseType,
+        documentType = documentType,
+        createdBy = createdBy,
+        amount = amount)
 
     fun expenseToString() : String {
         val formatter = DecimalFormat("#,###.##")

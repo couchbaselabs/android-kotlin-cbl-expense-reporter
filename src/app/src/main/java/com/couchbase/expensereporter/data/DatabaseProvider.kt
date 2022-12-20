@@ -76,6 +76,8 @@ class DatabaseProvider(
             createReportIdIndex(reportDatabase)
             createDocumentTypeReportIdIndex(reportDatabase)
 
+            createDocumentTypeTitleDepartmentIndex(startingDatabase)
+
             //setup replicator
             reportDatabase?.let { db ->
                 replicatorProvider.setupReplicator(db)
@@ -157,6 +159,23 @@ class DatabaseProvider(
                     "idx_document_type_reportId", IndexBuilder.valueIndex(
                         ValueIndexItem.property("documentType"),
                         ValueIndexItem.property("reportId")
+                    )
+                )
+            }
+        }
+    }
+
+    // create index for manager search
+    private fun createDocumentTypeTitleDepartmentIndex(
+        database: Database?
+    ) {
+        database?.let {
+            if (!it.indexes.contains("idx_document_type_title_department")) {
+                it.createIndex(
+                    "idx_document_type_title_department", IndexBuilder.valueIndex(
+                        ValueIndexItem.property("documentType"),
+                        ValueIndexItem.property("title"),
+                        ValueIndexItem.property("department")
                     )
                 )
             }
